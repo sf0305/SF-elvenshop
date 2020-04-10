@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/register.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<title>ElvenShop | ลงทะเบียน</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<section id="itany">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png" style="width: 50px; height: 50px;">
+					</div>
+				</el-backtop>
+				<div class="login">
+					<div class="logo">
+						<div>
+							<img src="images/index/logo.png" alt="">
+							<p v-text="sfLang.zhuce"></p>
+						</div>
+					</div>
+					<form action="">
+						<input onblur="yhmc()" onfocus="userFocus()" v-model="userMsg.data.F_UserName" class="username" type="text" value=""
+						 :placeholder="sfLang.sfyonghu"/>
+						<img class="user-bg" src="images/register/name_bg.png" alt="">
+						<p id="userText"></p>
+						<input onblur="emailVction()" onfocus="emailFocus()" v-model="userMsg.data.F_UserEmail" class="name" type="text"
+						 value="" :placeholder="sfLang.sfyouxiang"/>
+						<img class="email-bg" src="images/register/email-bg.png" alt="">
+						<p id="emailText"></p>
+						<input onblur="pwdVction()" onfocus="pwdFocus()" class="pwd" type="password" value="" :placeholder="sfLang.sfmima" />
+						<img class="pwd-bg" src="images/login/pwd_bg.png" alt="">
+						<p id="pwdText"></p>
+						<input onblur="pwdYz()" onfocus="pwd1Focus()" v-model="userMsg.data.F_PassWord" class="pwd-1" type="password"
+						 value="" :placeholder="sfLang.sfmima" />
+						<img class="pwd1-bg" src="images/login/pwd_bg.png" alt="">
+						<p id="pwd1Text"></p>
+						<input onblur="yzRandomNum()" maxlength="4" onfocus="yzmFocus()" class="yzNum" type="text" name="points" :placeholder="sfLang.sfcode"/>
+						<span class="yzm"></span>
+						<span onclick="randomNum()" class="huanyihuan" v-text="sfLang.huanyihuan"></span>
+						<br>
+						<p class="yzok"></p>
+						<div class="radio">
+							<input onclick="radioClick()" class="checkbox" name="checkbox" type="checkbox" style="width: 20px; height: 20px;opacity: 0;">
+						</div>
+						<span class="xieyi" v-text="sfLang.xieyi" @click="sfXieyi"></span>
+						<p class="zhuce"><a href="login.html" v-text="sfLang.yiyou"></a></p>
+						<span @click="send()" class="sub" v-text="sfLang.zhuce"></span>
+					</form>
+				</div>
+			</section>
+			<div class="dibu" id="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/register.js" type="text/javascript" charset="utf-8"></script>
+</html>

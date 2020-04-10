@@ -1,0 +1,287 @@
+* {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+html body {
+	background: #F1F1F1;
+
+}
+
+article {
+	width: 100%;
+	height: auto;
+}
+
+article>section {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.container {
+	height: auto;
+	min-height: 213px;
+}
+
+.container>div {
+	float: left;
+	margin-bottom: 20px;
+}
+
+.container-body {
+	width: 100%;
+}
+
+.body-body {
+	height: 50px;
+	background: white;
+}
+
+.body-body>ul>li {
+	float: left;
+	/* width: 13%; */
+	padding: 0 3rem;
+	text-align: center;
+	line-height: 50px;
+	position: relative;
+	cursor: pointer;
+}
+
+.body-body>ul>li.active {
+	background: #ff5230;
+	color: white;
+}
+
+.container-body-header {
+	margin-top: 20px;
+}
+
+.commodity-container {
+	background: rgba(0, 0, 0, .5);
+	height: 120px;
+}
+
+.commodity-container>div {
+	float: left;
+}
+
+#itany {
+	overflow: auto;
+	zoom: 1;
+}
+
+/* 增减 */
+#zeng {
+	height: 15px;
+	width: 15px;
+	right: 13px;
+	top: 11px;
+	position: absolute;
+	line-height: 15px;
+}
+.el-icon-arrow-up, .el-icon-arrow-down {
+	font-size: 10px;
+}
+#jian {
+	height: 15px;
+	width: 15px;
+	right: 13px;
+	bottom: 14px;
+	position: absolute;
+	line-height: 15px;
+}
+
+/* 商品 */
+.shangpin-list {
+	width: 100%;
+	overflow: auto;
+	zoom: 1;
+	margin-top: 20px;
+}
+
+.shangpin-list ul {
+	width: 100%;
+	overflow: auto;
+	zoom: 1;
+}
+
+.shangpin-list ul li {
+	width: 24%;
+	background: white;
+	float: left;
+	margin: 10px 0.5%;
+	padding: 1.5%;
+	padding-bottom: 10px;
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: all .2s ease;
+}
+
+.shangpin-list ul li:hover {
+	outline: 2px solid rgb(255, 82, 48);
+}
+
+
+.shangpin-list ul li img {
+	width: 100%;
+	height: 252px;
+	transition: all .2s ease;
+}
+
+.shangpin-list ul li div {
+	overflow: hidden;
+}
+
+.shangpin-list ul li img:hover {
+	transform: scale(1.1, 1.1);
+}
+
+.sp-biaoti {
+	width: 100%;
+	height: 40px;
+	line-height: 20px;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	margin: 10px auto;
+}
+
+.sp-jiage {
+	float: left;
+	color: #ff5230;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.sp-jiage span {
+	font-size: 18px;
+	color: #ff5230;
+	margin-left: 10px;
+}
+
+.sp-orders {
+	text-decoration: line-through;
+	color: #949494;
+	font-size: 14px;
+	line-height: 25px;
+}
+
+.sp-orders span {
+	text-decoration: none;
+	float: right;
+	color: black;
+}
+
+.sales-volume {
+	display: none;
+}
+
+.price {
+	display: none;
+}
+
+.new-product {
+	display: none;
+}
+
+.commodity-container-img {
+	width: 20%;
+	height: 100%;
+}
+
+.commodity-container-img>img {
+	width: 100px;
+	height: 100px;
+}
+
+.commodity-container-mingcheng {
+	width: 40%;
+	height: 100%;
+}
+
+.mingcheng-p {
+	line-height: 100px;
+}
+
+.commodity-container-heji {
+	width: 20%;
+	height: 100%;
+}
+
+.commodity-container-pingjia {
+	width: 20%;
+	height: 100%;
+}
+
+.commodity-list {
+	height: auto;
+}
+
+.commodity-list-ul {
+	height: auto;
+}
+
+.commodity-list-ul>li {
+	width: 23%;
+	float: left;
+	height: auto;
+	margin: 10px 1%;
+}
+
+.commodity-list-ul>li>div {
+	width: 100%;
+	height: 200px;
+}
+
+.commodity-list-ul>li>div>img {
+	width: 100%;
+	height: 100%;
+}
+
+
+/* html转出 */
+.sp-jiage span {
+	margin-left: 0;
+}
+
+.sp-price {
+	float: left;
+	font-size: 14px;
+	width: 100%;
+	color: #999;
+	margin-top: -18px;
+}
+
+.sp-price span {
+	line-height: 24px;
+	text-decoration: line-through;
+}
+
+.sp-nums {
+	float: right;
+	font-size: 14px;
+	color: #999;
+	line-height: 42px;
+}
+
+.sp-nums span {
+	margin-right: 0.2rem;
+}
+
+.none {
+	text-align: center;
+}
+
+.none p {
+	color: #666;
+}
+
+.top {
+	top: 17.5px!important
+}
+
+.bottom {
+	bottom: 17.5px!important
+}

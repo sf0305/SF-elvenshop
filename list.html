@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/list.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | รายการสินค้า</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<article id="itany" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<section class="header-logo">
+					<div>
+						<div class="header-left">
+							<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+							<div @click="toIndexPage" class="hand">
+								<p>ELVENSHOP</p>
+								<p>Quick and convenient</p>
+							</div>
+						</div>
+						<div class="search">
+							<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+							<span></span>
+							<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+							<nav class="sfhot-words" v-show="sfhistory">
+								<ul class="sfhot-words-list">
+									<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+										<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+										<span v-text="sfLang.sfserhis"></span>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</section>
+				<section class="container">
+					<div class="container-body">
+						<div class="container-body-header">
+							<div class="body-body">
+								<ul>
+									<li class="compre" @click="allProduct" :class="{active: ins == 0}">
+										<p v-text="sfLang.all"></p>
+									</li>
+									<li class="sales" @click="salesProduct" :class="{active: ins == 1}">
+										<p v-text="sfLang.sales"></p>
+										<div v-if="ins == 1">
+											<span id="zeng" v-show="saleSort == true" :class="{top: saleSort == true}" class="el-icon-arrow-up"></span>
+											<span id="jian" v-show="saleSort == false" :class="{bottom: saleSort == false}" class="el-icon-arrow-down"></span>
+										</div>
+										<div v-else>
+											<span id="zeng"><i class="el-icon-arrow-up"></i></span>
+											<span id="jian"><i class="el-icon-arrow-down"></i></span>
+										</div>
+									</li>
+									<li class="pri" @click="priceProduct" :class="{active: ins == 2}">
+										<P v-text="sfLang.price"></P>
+										<div v-if="ins == 2">
+											<span id="zeng" v-show="priceSort == true" :class="{top: priceSort == true }" class="el-icon-arrow-up"></span>
+											<span id="jian" v-show="priceSort == false" :class="{bottom: priceSort == false}" class="el-icon-arrow-down"></span>
+										</div>
+										<div v-else>
+											<span id="zeng"><i class="el-icon-arrow-up"></i></span>
+											<span id="jian"><i class="el-icon-arrow-down"></i></span>
+										</div>
+									</li>
+									<li class="product" @click="newProduct" :class="{active: ins == 3}">
+										<p v-text="sfLang.news"></p>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+						<div class="shangpin-list comprehensive">
+							<ul>
+								<li v-for="(value,index) in searchData" :key="index" @click="detailHandle(value.f_MarketingId)">
+									<div>
+										<img :src="value.f_MainImageUrl+'?imageView/2/w/252/h/252'">
+									</div>
+									<p class="sp-biaoti" v-if="value.f_MarketingType == 0" v-text="value.f_Title"></p>
+									<p class="sp-biaoti" v-if="value.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+value.f_Title"></p>
+									<p class="sp-biaoti" v-if="value.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+value.f_Title"></p>
+									<!-- <p class="sp-biaoti" v-else v-text="value.f_Title"></p> -->
+									<p class="sp-jiage"><span v-text="currencySign"></span><span v-text="value.f_SalesPrice"></span></p>
+									<p class="sp-nums"><span v-text="sfLang.sales"></span>{{value.f_SaleNum || 0}}</p>
+									<p class="sp-price"><span v-text="currencySign"></span><span v-text="value.f_OriginalPrice"></span></p>
+								</li>
+							</ul>
+						</div>
+						<div class="shangpin-list sales-volume">
+							<ul>
+								<li v-for="(value,index) in searchData" :key="index" @click="detailHandle(value.f_MarketingId)">
+									<img :src="value.f_MainImageUrl+'?imageView/2/w/252/h/252'" alt="">
+									<p class="sp-biaoti" v-text="value.f_Title"></p>
+									<p class="sp-jiage"><span v-text="currencySign"></span><span v-text="value.f_SalesPrice"></span></p>
+									<p class="sp-price"><span v-text="currencySign"></span><span v-text="value.f_OriginalPrice"></span></p>
+									<p class="sp-nums"><span v-text="sfLang.sales"></span>{{value.f_SaleNum || 0}}</p>
+								</li>
+							</ul>
+						</div>
+						<div class="shangpin-list price">
+							<ul>
+								<li v-for="(value,index) in searchData" :key="index" @click="detailHandle(value.f_MarketingId)">
+									<img :src="value.f_MainImageUrl+'?imageView/2/w/252/h/252'" alt="">
+									<p class="sp-biaoti" v-text="value.f_Title"></p>
+									<p class="sp-jiage"><span v-text="currencySign"></span><span v-text="value.f_SalesPrice"></span></p>
+									<p class="sp-price"><span v-text="currencySign"></span><span v-text="value.f_OriginalPrice"></span></p>
+									<p class="sp-nums"><span v-text="sfLang.sales"></span>{{value.f_SaleNum || 0}}</p>
+								</li>
+							</ul>
+						</div>
+						<div class="shangpin-list new-product">
+							<ul>
+								<li v-for="(value,index) in searchData" :key="index" @click="detailHandle(value.f_MarketingId)">
+									<img :src="value.f_MainImageUrl+'?imageView/2/w/252/h/252'" alt="">
+									<p class="sp-biaoti" v-text="value.f_Title"></p>
+									<p class="sp-jiage"><span v-text="currencySign"></span><span v-text="value.f_SalesPrice"></span></p>
+									<p class="sp-price"><span v-text="currencySign"></span><span v-text="value.f_OriginalPrice"></span></p>
+									<p class="sp-nums"><span v-text="sfLang.sales"></span>{{value.f_SaleNum || 0}}</p>
+								</li>
+							</ul>
+						</div>
+						<div class="none" v-show="searchFlag">
+							<img src="images/shopping/empty.png">
+							<p v-text="sfLang.none"></p>
+						</div>
+						<div class="notContent" v-show="searchVisible">
+							<img src="./images/icon/searchIcon.png">
+							<p v-text="sfLang.none"></p>
+						</div>
+						<div class="paging">
+							<el-pagination @current-change="changePage" :current-page.sync="page" background layout="prev, pager, next" :total="total"
+							 :hide-on-single-page="pagerVisible">
+							</el-pagination>
+						</div>
+					</div>
+				</section>
+				<div style="clear: both;"></div>
+			</article>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/list.js" type="text/javascript" charset="utf-8"></script>
+</html>

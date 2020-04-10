@@ -1,0 +1,164 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-weight: 500;
+	font-size: 16px;
+	color: #333;
+	list-style: none;
+}
+[v-cloak] {
+	display: none;
+}
+.flexbox {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+.mainframe {
+	width: 1200px !important;
+	margin: 0 auto;
+}
+.dibu {
+	width: 100%;
+	height: auto;
+	bottom: 60px;
+}
+
+.dibu img {
+	width: 100%;
+	display: inherit;
+}
+.saveapp-top{
+	width: 100%;
+	height: 85px;
+}
+.saveapp-top img{
+	width: 50px;
+	height: 50px;
+	/* float: left; */
+	margin-top: 17.5px;
+	margin-left: 120px;
+}
+.saveapp-top p{
+	/* float: left; */
+	line-height: 85px;
+	font-size: 24px;
+	color: #4C4948;
+	font-weight: bold;
+	margin-left: 30px;
+}
+.saveapp{
+	background: url(../images/saveapp/saveapp-bg.png) no-repeat;
+	background-size: 100% 100%;
+	width: calc(100% - 240px);
+	height: 800px;
+	padding-left: 120px;
+	padding-right: 120px;
+}
+.saveapp-left{
+	width: 55%;
+	float: left;
+	padding-top: 100px;
+}
+.saveapp-left h1{
+	color: white;
+	font-size: 56px;
+	font-weight: bold;
+}
+.saveapp-left h2{
+	color: white;
+	font-size: 34px;
+	width: 90%;
+	margin-top: 30px;
+}
+.saveapp-left h3{
+	color: white;
+	font-size: 34px;
+	margin-top: 50px;
+}
+.saveapp-left>div{
+	margin-top: 20px;
+}
+.saveapp-left div img{
+	width: 200px;
+}
+.saveapp-left nav{
+	position: relative;
+	margin-top: 20px;
+	padding: 10px;
+	background: white;
+	width: 180px;
+}
+#saveqrcode img{
+	width: 180px;
+	height: 180px;
+}
+.saveapp-left nav>img{
+	position: absolute;
+	width: 70px;
+	height: 70px;
+	top: 65px;
+	left: 65px;
+}
+.saveapp-right{
+	float: left;
+}
+.saveapp-right img{
+	padding-top: 50px;
+	height: 700px;
+}
+@media screen and (max-width: 1550px){
+	.saveapp-right{
+		float: right;
+	}
+	.saveapp-right img{
+		padding-top: 150px;
+		height: 500px;
+	}
+}
+.saveapp-bottom{
+	width: calc(100% - 240px);
+	padding: 100px 120px;
+	overflow: auto;
+}
+.saveapp-bottom h1{
+	text-align: center;
+	font-size: 36px;
+	font-weight: bold;
+}
+.saveapp-bottom h2{
+	text-align: center;
+	font-size: 24px;
+	margin: 0 auto;
+	width: 800px;
+	margin-top: 30px;
+}
+.saveapp-bottom ul{
+	margin-top: 100px;
+}
+.saveapp-bottom ul li{
+	float: left;
+	width: 33.33%;
+	height: 184px;
+	text-align: center;
+	margin-bottom: 80px;
+}
+.saveapp-bottom ul li img{
+	width: 100px;
+	height: 100px;
+}
+.saveapp-bottom ul li h3{
+	font-size: 22px;
+	margin-top: 20px;
+}
+.saveapp-bottom ul li h4{
+	font-size: 16px;
+	margin-top: 10px;
+	color: #666;
+}
+.version {
+	text-align: center;
+	margin-top: 8px;
+}

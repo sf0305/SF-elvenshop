@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/checkout.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | ยืนยันการสั่งซื้อ</title>
+		<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="orderDetail" v-cloak v-loading="loading">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div class="section">
+					<section class="header-logo">
+						<div>
+							<div class="header-left">
+								<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+								<div @click="toIndexPage" class="hand">
+									<p>ELVENSHOP</p>
+									<p>Quick and convenient</p>
+								</div>
+							</div>
+							<!-- <div class="erbu">
+								<img src="images/queren/liucheng.png" alt="">
+								<ul>
+									<li v-text="sfLang.myCart"></li>
+									<li v-text="sfLang.queren"></li>
+									<li v-text="sfLang.finish"></li>
+								</ul>
+							</div> -->
+						</div>
+					</section>
+				</div>
+<!-- 				<div class="guanli">
+					<p>
+						<span><img src="images/queren/add.png" alt=""></span>
+						<b v-text="sfLang.choose"></b>
+					</p>
+				</div> -->
+				<div class="dizhi">
+					<div class="checkout-address-selection">
+						<div class="address-border-delivery"></div>
+						<div class="checkout-address-selection-container">
+							<div class="section-header">
+								<div class="section-header-text">
+									<svg class="svg-icon icon-location-marker" height="16" viewBox="0 0 12 16" width="12">
+										<path d="M6 3.2c1.506 0 2.727 1.195 2.727 2.667 0 1.473-1.22 2.666-2.727 2.666S3.273 7.34 3.273 5.867C3.273 4.395 4.493 3.2 6 3.2zM0 6c0-3.315 2.686-6 6-6s6 2.685 6 6c0 2.498-1.964 5.742-6 9.933C1.613 11.743 0 8.498 0 6z" fill-rule="evenodd"></path>
+									</svg>
+									{{sfLang.choose}}
+								</div>
+								<div class="manage-buttons" v-if="changeDialogVisible == false">
+									<button class="stardust-button add-btn" v-text="sfLang.xinadd" @click="openNewAddress"></button>
+									<button class="stardust-button manage-btn" v-text="sfLang.manageAdr" @click="toMyPage"></button>
+								</div>
+							</div>
+							<!-- 只显示一行地址 -->
+							<div class="selected-address-summary" v-if="changeDialogVisible == true">
+								<div class="checkout-address-row">
+									<div class="checkout-address-row-user-detail">
+										<span v-text="addressDefalutData.f_ReceiveName"></span>
+										<span v-text="addressDefalutData.f_ReceiveTel"></span>
+									</div>
+									<div class="checkout-address-row-address-summary" v-text="addressDefalutData.f_ReceiveAddress"></div>
+									<div class="checkout-address-row-default-label" v-if="addressDefalutData.f_IsDefalut == 1" v-text="sfLang.moren"></div>
+								</div>
+								<div class="checkout-address-change-btn" v-text="sfLang.genggai" @click="changeAdrVisibly"></div>
+							</div>
+							<!-- 点击更改地址 加载多个地址给用户选择 -->
+							<div class="edit-address" v-if="changeDialogVisible == false">
+								<div class="stardust-radio-group">
+									<div class="stardust-radio" v-for="(item, index) in addressData" :key="index" @click="changeAdr(item.f_Id)">
+										<div class="stardust-radio-button" :class="{checked: item.f_Id == selectedAdr.f_Id}">
+											<div class="outer-circle">
+												<div class="inner-circle"></div>
+											</div>
+										</div>
+										<div class="stardust-radio-content">
+											<div class="stardust-radio-label">
+												<div class="checkout-address-row">
+													<div class="checkout-address-row-user-detail">
+														<span v-text="item.f_ReceiveName"></span>
+														<span v-text="item.f_ReceiveTel"></span>
+													</div>
+													<div class="checkout-address-row-address-summary" v-text="item.f_ReceiveAddress"></div>
+													<div class="checkout-address-row-default-label" v-if="item.f_IsDefalut == 1" v-text="sfLang.moren"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="edit-button-btns">
+									<button :class="['stardust-button', addressData.length == 0 ? 'stardust-button-gray' : 'stardust-button-primary']" v-text="sfLang.queding" @click="submitAdr"></button>
+									<button class="stardust-button cancel-btn" v-text="sfLang.quxiao" @click="changeDialogVisible = true"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- 添加地址弹窗 -->
+					<el-dialog :title="sfLang.xinzeng" :visible.sync="addDialogVisible" @close="closeDialog(1)">
+						<el-form :model="addressEditMsg.data" ref="addressEditMsg" label-width="120px" size="small">
+							<el-form-item :label="sfLang.shoujian" prop="F_ReceiveName" :rules="{ required: true, message: sfLang.receiveNameTip}">
+								<el-input v-model="addressEditMsg.data.F_ReceiveName" size="small" maxlength='26' :placeholder="sfLang.receiveNameTip"></el-input>
+							</el-form-item>
+							<el-form-item :label="sfLang.shouji" prop="F_ReceiveTel" :rules="[
+							          { required: true, message: sfLang.receiveTelTip, trigger: 'blur'},
+							          { validator: validateAddPhone, trigger: 'blur' }
+							         ]">
+								<el-input v-model="addressEditMsg.data.F_ReceiveTel" size="small" :placeholder="sfLang.receiveTelTip" maxlength="20"></el-input>
+							</el-form-item>
+							<el-row>
+								<el-col :span="8">
+									<el-form-item :label="sfLang.country" prop="F_ReceiveCountry" :rules="{ required: true, message: sfLang.receiveCountryTip, trigger: 'change' }">
+										<el-select v-model="addressEditMsg.data.F_ReceiveCountry" filterable @change="changeCountry">
+											<el-option label="Thailand" value="Thailand"></el-option>
+											<el-option label="United States of America" value="United States of America"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8" v-if="provinceData.length != 0">
+									<el-form-item :label="sfLang.province" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip }">
+										<!-- <el-input v-model="addressEditMsg.data.F_ReceiveProvince" size="small" :placeholder="sfLang.receiveProvinceTip" maxlength='50'></el-input> -->
+										<el-select v-model="addressEditMsg.data.F_ReceiveProvince" filterable @change="changeProvince" :no-data-text="sfLang.none">
+											<el-option v-for="(item, index) in provinceData" :key="index" :label="item" :value="item"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
+								<el-col :span="8" v-if="provinceData.length != 0">
+									<el-form-item :label="sfLang.city" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveProvinceTip }">
+										<el-select v-model="addressEditMsg.data.F_ReceiveCity" filterable :placeholder="sfLang.receiveCityTip" :no-data-text="sfLang.none">
+											<el-option v-for="(item, index) in cityData" :key="index" :label="item" :value="item"></el-option>
+										</el-select>
+										<!-- <el-input v-model="addressEditMsg.data.F_ReceiveCity" size="small" :placeholder="sfLang.receiveCityTip" maxlength='50'></el-input> -->
+									</el-form-item>
+								</el-col>
+							</el-row>
+							<el-form-item v-if="provinceData.length == 0" :label="sfLang.province" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip }">
+								<el-input v-model="addressEditMsg.data.F_ReceiveProvince" size="small" :placeholder="sfLang.receiveProvinceTip" maxlength='50'></el-input>
+							</el-form-item>
+							<el-form-item v-if="provinceData.length == 0" :label="sfLang.city" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveProvinceTip }">
+								<el-input v-model="addressEditMsg.data.F_ReceiveCity" size="small" :placeholder="sfLang.receiveCityTip" maxlength='50'></el-input>
+							</el-form-item>
+							<el-form-item :label="sfLang.zip" prop="F_ReceiveCode" :rules="{ required: true, message: sfLang.receiveCodeTip }">
+								<el-input v-model="addressEditMsg.data.F_ReceiveCode" size="small" :placeholder="sfLang.receiveCodeTip" maxlength='20'></el-input>
+							</el-form-item>
+							<el-form-item :label="sfLang.email" prop="F_ReceiveEmail" :rules="[
+								{ required: false, message: sfLang.receiveEmailTip, trigger: 'blur' },
+								{ type: 'email', message: sfLang.receiveEmailtype, trigger: 'blur' }
+							]">
+								<el-input v-model="addressEditMsg.data.F_ReceiveEmail" :placeholder="sfLang.receiveEmailTip" maxlength='50'></el-input>
+							</el-form-item>
+							<el-form-item :label="sfLang.receiveComName" prop="F_ReceiveComName">
+								<el-input v-model="addressEditMsg.data.F_ReceiveComName" size="small" :placeholder="sfLang.receiveComNameTip"></el-input>
+							</el-form-item>
+							<el-form-item :label="sfLang.xiangxi" prop="F_ReceiveAddress" :rules="{ required: true, message: sfLang.receiveAddressTip }">
+								<el-input type="textarea" :rows=2 v-model="addressEditMsg.data.F_ReceiveAddress" size="small" :placeholder="sfLang.receiveAddressTip"
+								 maxlength='100'></el-input>
+							</el-form-item>
+							<el-form-item>
+								<el-checkbox v-model="addressEditMsg.data.F_IsDefalut" true-label="1" false-label="0" :label="sfLang.defalut"></el-checkbox>
+							</el-form-item>
+						</el-form>
+						<div slot="footer" class="dialog-footer">
+							<el-button @click="closeDialog(1)" size="small" v-text="sfLang.quxiao"></el-button>
+							<el-button @click="addAddress('addressEditMsg')" size="small" v-text="sfLang.queding"></el-button>
+						</div>
+						</dialog>
+				</div>
+				<div class="guanli">
+					<p v-text="sfLang.queren"></p>
+				</div>
+				<!-- 确认订单 -->
+				<div class="fangshi">
+					<ul class="fangshi-title">
+						<li class="fangshi-title-1" v-text="sfLang.proMsg"></li>
+						<li class="fangshi-title-2" v-text="sfLang.proShu"></li>
+						<li class="fangshi-title-3" v-text="sfLang.proPri"></li>
+						<li class="fangshi-title-4" v-text="sfLang.proNum"></li>
+						<li class="fangshi-title-5" v-text="sfLang.proXiao"></li>
+					</ul>
+					<ul class="fangshi-product">
+						<li v-for="(item, index) in shoppingData" :key="index">
+							<ul>
+								<li class="fangshi-product-img">
+									<img :src="item.attributeImg+'?imageView/2/w/105/h/105'" alt="" width="105">
+									<!-- <div class="sold-out" v-text="sfLang.sfxiajia"></div> -->
+								</li>
+								<li class="fangshi-product-title">
+									<p v-if="item.f_MarketingType == 0" v-text="item.f_Title"></p>
+									<p v-if="item.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item.f_Title"></p>
+									<p v-if="item.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item.f_Title"></p>
+								</li>
+								<li class="fangshi-product-guige">
+									<p v-text="item.sku"></p>
+									<!-- <p>Color:<span>white</span></p>
+								<p>Shose Size:<span>36</span></p> -->
+								</li>
+								<li class="fangshi-product-price">
+									<p><i class="fontStyle" v-text="currencySign"></i><span v-text="item.f_SalesPrice"></span></p>
+								</li>
+								<li class="fangshi-product-num" style="text-align: center;">
+									<span v-text="item.f_Num"></span>
+								</li>
+								<li class="fangshi-product-money" style="margin-right: 0;">
+									<p><i class="fontStyle" v-text="currencySign"></i>{{item.totalPrice}}</p>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<hr style="color:rgb(174,206,255); border: 1px solid; margin: 10px 0;" />
+					<ul class="fangshi-msg">
+						<li class="fangshi-msg-left">
+							<p v-text="sfLang.liuyan"></p>
+							<textarea class="sftextarea" v-model="dingdan.data.F_Remark" rows="" cols="" :placeholder="sfLang.input" maxlength="200"></textarea>
+						</li>
+						<li class="fangshi-msg-right">
+							<div>
+								<p v-text="sfLang.discount"></p>
+								<span class="youhui-price" :class="{color9: notPay == true}"><i class="fontStyle" v-text="'-'+currencySign"></i><i class="fontStyle" v-text="discount"></i></span>
+							</div>
+							<div>
+								<p>
+									<span v-text="sfLang.heji"></span>
+									<span class="heji-money" :class="{color9: notPay == true}">
+										<!-- <span class="discount">
+											(<i class="fontStyle" v-text="sfLang.zaixian+':'"></i><i class="fontStyle" v-text="currencySign"></i><i
+											 class="fontStyle" v-text="f_Fee"></i>)
+										</span> -->
+										<i class="fontStyle" v-text="currencySign"></i><i class="fontStyle" v-text="f_TotalPrice"></i>
+									</span>
+								</p>
+							</div>
+						</li>
+					</ul>
+					<!-- paypal 和 货到付款隐藏，勿删 -->
+					<!-- <ul class="fangshi-method">
+			<li class="fangshi-method-1">
+				<p>Payment Method</p>
+			</li>
+			<li class="fangshi-method-2">
+				<p class="online">
+					<img src="images/queren/xuanzhong.png" alt="">
+					Online Payments
+				</p>
+				<p class="delivery">
+					<img src="images/queren/xuanzhong-bg.png" alt="">
+					Case On Delivery
+				</p>
+			</li>
+			<li class="fangshi-method-3">
+				<img src="images/queren/paypal.png" alt="">
+				Paypal <span>></span>
+			</li>
+		</ul> -->
+					<!-- 				<div class="fangshi-pay">
+					<div class="fangshi-payment">
+						<p>Actual Payment:<span class="jiesuan-money">3999.00</span></p>
+						<p>Address:<span>yongtai baiyun district guangdongyongtai baiyun district guangdyongtai baiyun district guangdong</span></p>
+						<p>Receiver:<span>ZHANGGUA 12345678910</span></p>
+					</div>
+				</div> -->
+					<div class="guanli" style="margin-top: 0;">
+						<p v-text="sfLang.orderMethod"></p>
+					</div>
+					<div class="sub">
+						<div class="cash-delivery sfcash" @click="sfonline" v-text="sfLang.sfonline"></div>
+						<div class="cash-delivery" @click="offlineHandle" v-text="sfLang.huodao"></div>
+						<div class="sfpaypalBg" :class="{ on: issfpaypal }"></div>
+						<div class="sfpaypal" :class="{ on: issfpaypal }">
+							<nav>
+								<span v-text="sfLang.heji+':'"></span>
+								<span v-text="currencySign+totalMoney"></span>
+								<span v-text="'('+sfLang.zaixian+':'+currencySign+f_Fee+')'"></span>
+							</nav>
+							<div id="paypal-button" style="margin-left: 8%;"></div>
+							<div class="onlineClose" @click="sfonlineClose"><img src="./images/sfclose.png" alt=""></div>
+						</div>
+						<!-- <p @click="createOrder">Submit Order</p> -->
+						<!-- 					<p>
+						<a href="shopping.html"><img src="images/queren/return.png" alt=""></a>
+						Return to shopping cart
+					</p> -->
+					</div>
+					<!-- 				<div class="mask" :class="{ on: payDialogVisible }"></div>
+				<div class="layer-confirm" :class="{ on: payDialogVisible }">
+					<span style="color: #000000;cursor: pointer;font-size: 1.4em;float: right;"  @click="closeModel">&times;</span>
+					<div class="del-wrapper">
+						<div id="paypal-button" style="margin: 20px 0;"></div>
+						<div style="margin-top: 15px; margin-bottom: 15px; width: 250px; text-align: center; border: 1px solid #999; line-height: 30px; border-radius: 60px;" @click="offlineHandle">货到付款</div>
+					</div>
+				</div> -->
+				</div>
+
+
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<!-- <hr style="margin: 50px 15% 50px 15%;"> -->
+			<div id="dibu" class="dibu"></div>
+			<!-- <div  id="paypal-button"></div> -->
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/thailand.js" type="text/javascript"></script>
+	<script src="js/checkout.js" type="text/javascript" charset="utf-8"></script>
+</html>

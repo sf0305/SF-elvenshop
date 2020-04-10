@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/PingJia.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | การประเมินสินค้า</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="pingjia" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div class="review">
+					<p v-text="sfLang.proRev"></p>
+				</div>
+				<div class="mainframe p-block">
+					<div class="product-main flexbox" v-for="(item, index) in orderData.orderDetail" :key="index">
+						<div class="left-area">
+							<div class="product-img flexbox">
+								<img :src="item.f_GoodsImg">
+							</div>
+							<p class="product-title" v-text="item.f_SaleTitle"></p>
+							<div class="product-sku">
+								<span v-text="item.sku"></span>
+							</div>
+						</div>
+						<div class="info-wraper flex1">
+							<div class="product-stat flexbox">
+								<div class="product-text">
+									<span>*</span><span v-text="sfLang.proRev"></span>
+								</div>
+								<span>
+									<el-rate v-model="stat[index]"></el-rate>
+								</span>
+							</div>
+							<div class="text"><span v-text="sfLang.pingjia"></span></div>
+							<div class="product-content">
+								<el-input type="textarea" :autosize="{ minRows: 4, maxRows: 7}" :placeholder="sfLang.pinglun" v-model="content[index]">
+								</el-input>
+							</div>
+							<div class="upload-img">
+								<el-upload action="#" list-type="picture-card" :limit="5" :auto-upload="false" :on-change="handleChange" :on-remove="handleRemove">
+								  <i class="el-icon-camera" @click="uploadImgArr(index)"></i>
+								</el-upload>
+								<div class="pic-num">0/5</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tijiao">
+					<div>
+						<input type="submit" :value="sfLang.fabiao" :disabled="nosub" @click="submit" />
+					</div>
+				</div>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/PingJia.js" type="text/javascript" charset="utf-8"></script>
+</html>

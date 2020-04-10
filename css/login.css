@@ -1,0 +1,272 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	background: url(../images/login/bg.jpg) no-repeat center;
+	background-size: 1920px 100%;
+	background-position: center center;
+/* 	background-position-y: 20px; */
+}
+.header-nav-left li:nth-child(1) a{
+	color: #ff5230;
+}
+
+/* .footer {
+	position: fixed;
+	bottom: 0;
+}
+
+.dibu {
+	position: fixed;
+	bottom: 40px;
+} */
+
+section {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: auto;
+	min-height: 831px;
+}
+
+.login {
+	float: right;
+	width: 35%;
+	margin-right: 5%;
+	margin-top: 80px;
+	margin-bottom: 80px;
+	/* height: 480px; */
+	background: white;
+	border-radius: 10px;
+  box-shadow: rgba(220,182,179,0.5) 1px 1px 20px;
+}
+
+.logo {
+	width: 17%;
+	height: 120px;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.logo img {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.login form {
+	width: 100%;
+	position: relative;
+}
+
+.login form input {
+	margin: 0 10%;
+	width: 80%;
+	height: 40px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+	cursor: pointer;
+}
+
+.login form p {
+	height: 30px;
+	display: block;
+	color: #ff5230;
+	font-size: 12px;
+	margin-left: 35px;
+	line-height: 25px;
+	width: 80%;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.login form p span {
+	height: 16px;
+	width: 16px;
+	background: #ff5230;
+	border-radius: 100%;
+	float: left;
+	margin-left: 0;
+	margin-right: 5px;
+	margin-top: 5px;
+	color: white;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: center;
+}
+
+.name-bg {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 6px;
+	left: 13%;
+}
+
+.pwd-bg {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 80px;
+	left: 13%;
+}
+
+.name {
+	text-indent: 50px;
+}
+
+.pwd {
+	text-indent: 50px;
+}
+
+.forget {
+	width: 80%;
+	height: 30px;
+	margin: 20px auto;
+}
+
+.forget p a {
+	color: #ff5230;
+	text-decoration: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+	display: inline-block;
+}
+
+.wangji {
+	float: left;
+	max-width: 100%;
+}
+
+.zhuce {
+	float: right;
+	max-width: 100%;
+}
+
+.yzNum {
+	text-indent: 30px;
+	width: 20% !important;
+	margin-right: 5% !important;
+}
+
+.yzm {
+	background: url(../images/login/yzbg.jpg) no-repeat;
+	color: white;
+	padding: 10px 20px;
+	font-size: 1.2em;
+	letter-spacing: 4px;
+	border-radius: 10px;
+}
+
+.huanyihuan {
+	cursor: pointer;
+	font-size: 14px;
+	color: #949494;
+	margin-left: 10px;
+	padding-top: 10px;
+	float: right;
+	width: 150px;
+	height: 30px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: pre;
+}
+.huanyihuan:hover{
+	color: #ff5230;
+}
+
+.sub {
+	background: url(../images/login/sub_bg.png) no-repeat center;
+	background-size: 100%;
+	width: 80%;
+	height: 40px;
+	display: block;
+	margin: 0 auto;
+	border-radius: 2rem;
+	text-align: center;
+	line-height: 40px;
+	color: white;
+	cursor: pointer;
+	position: relative;
+	transition: all .2s;
+}
+
+.sub:hover {
+	box-shadow: rgba(0, 0, 0, .2) 0 3px 5px;
+	bottom: 1px;
+}
+
+.snslinks {
+	display: block;
+	 width: 100%;
+	 border: 0;
+	 border-top: 1px solid #dbdbdb;
+	 margin: 0;
+	 text-align: center;
+}
+.snslinks legend {
+	color: #999;
+	display: block;
+	margin: 0 auto;
+	padding: 13px;
+	font-size: 14px;
+}
+.snslinks-box {
+	width: 100%;
+	margin-top: 1rem;
+	margin-bottom: 2rem;
+}
+.snslink-item {
+	width: 80%;
+	height: 40px;
+	line-height: 39px;
+	background-color: #32589e;
+	border-radius: 2px;
+	color: #fff;
+	text-align: center;
+	font-size: 14px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+.snslink-item.line {
+	height: 40px;
+	background-color: #00c200;
+	border-radius: 2rem;
+	font-size: 16px;
+	font-weight: 700;
+}
+.snslink-item.facebook {
+	background-color: #1877f2;
+	height: 40px;
+	border-radius: 2rem;
+	font-size: 16px;
+	font-weight: 700;
+}
+.snslink-item .ico-snslink {
+	font-size: 20px;
+	margin-right: 8px;
+	font-style: normal;
+}
+.snslink-item.line .ico-snslink {
+	width: 30px;
+	height: 30px;
+	background: url(../images/login/lineIcon.png) no-repeat center center;
+	background-size: contain;
+	margin-right: 6px;
+	display: block;
+}
+.snslink-item.facebook .ico-snslink {
+	width: 30px;
+	height: 30px;
+	background: url(../images/login/facebookIcon.png) no-repeat center center;
+	background-size: contain;
+	margin-right: 6px;
+	display: block;
+}

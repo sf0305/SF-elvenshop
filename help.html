@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<link rel="stylesheet" type="text/css" href="css/help.css" />
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | ศูนย์ช่วยเหลือ</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<article id="itany">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div style="background: white;padding-top: 10px;">
+					<section class="header-logo">
+						<div>
+							<div class="header-left">
+								<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+								<div>
+									<p>ELVENSHOP</p>
+									<p>Quick and convenient</p>
+								</div>
+							</div>
+							<div class="search">
+								<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+								<span></span>
+								<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+								<nav class="sfhot-words" v-show="sfhistory">
+									<ul class="sfhot-words-list">
+										<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+											<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+											<span v-text="sfLang.sfserhis"></span>
+										</li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</section>
+				</div>
+				<div class="bangzhu-wrap">
+					<div class="bangzhu">
+						<el-tabs :tab-position="tabPosition" v-model="elnames">
+							<el-tab-pane disabled :label="sfLang.help">
+								<h1 style="color: #ff5230; text-align: center;margin-top: 200px;font-weight: 500;">welcome</h1>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.zhuce+'？'">
+								<h3 v-text="helpcenter.zhuce1"></h3>
+								<h5 v-text="helpcenter.zhuce2"></h5>
+								<p v-text="helpcenter.zhuce3"></p>
+								<p v-text="helpcenter.zhuce4"></p>
+								<h4 v-text="helpcenter.zhuce5"></h4>
+								<p v-text="helpcenter.zhuce6"></p>
+								<p>{{helpcenter.zhuce7}} <a class="sfzhuce" :href="sfzhuce">{{sfzhuce}}</a> {{helpcenter.zhuce71}}</p>
+								<p v-text="helpcenter.zhuce8"></p>
+								<p v-text="helpcenter.zhuce9"></p>
+								<h4 v-text="helpcenter.zhuce10"></h4>
+								<p v-text="helpcenter.zhuce11"></p>
+								<p v-text="helpcenter.zhuce12"></p>
+								<p v-text="helpcenter.zhuce13"></p>
+								<h5 v-text="helpcenter.zhuce14"></h5>
+								<h4 v-text="helpcenter.zhuce15"></h4>
+								<p v-text="helpcenter.zhuce16"></p>
+								<p v-text="helpcenter.zhuce17"></p>
+								<h4 v-text="helpcenter.zhuce18"></h4>
+								<p v-text="helpcenter.zhuce19"></p>
+								<p v-text="helpcenter.zhuce20"></p>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.help2">
+								<h3 v-text="helpcenter.fukuan1"></h3>
+								<h4 v-text="helpcenter.fukuan2"></h4>
+								<p v-text="helpcenter.fukuan3"></p>
+								<h4 v-text="helpcenter.fukuan4"></h4>
+								<p v-text="helpcenter.fukuan5"></p>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.help3">
+								<h3 v-text="helpcenter.songhuo1"></h3>
+								<h4 v-text="helpcenter.songhuo2"></h4>
+								<p v-text="helpcenter.songhuo3"></p>
+								<h4 v-text="helpcenter.songhuo4"></h4>
+								<p v-text="helpcenter.songhuo5"></p>
+								<h4 v-text="helpcenter.songhuo6"></h4>
+								<p v-text="helpcenter.songhuo7"></p>
+								<p v-text="helpcenter.songhuo8"></p>
+								<p v-text="helpcenter.songhuo9"></p>
+								<p v-text="helpcenter.songhuo10"></p>
+								<h4 v-text="helpcenter.songhuo11"></h4>
+								<p v-text="helpcenter.songhuo12"></p>
+								<h4 v-text="helpcenter.songhuo13"></h4>
+								<p v-text="helpcenter.songhuo14"></p>
+								<p v-text="helpcenter.songhuo15"></p>
+								<p v-text="helpcenter.songhuo16"></p>
+								<p v-text="helpcenter.songhuo17"></p>
+								<h4 v-text="helpcenter.songhuo18"></h4>
+								<p v-text="helpcenter.songhuo19"></p>
+								<p v-text="helpcenter.songhuo20"></p>
+								<h4 v-text="helpcenter.songhuo21"></h4>
+								<p v-text="helpcenter.songhuo22"></p>
+								<h4 v-text="helpcenter.songhuo23"></h4>
+								<p v-text="helpcenter.songhuo24"></p>
+								<h4 v-text="helpcenter.songhuo25"></h4>
+								<p v-text="helpcenter.songhuo26"></p>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.tuihuo">
+								<h3 v-text="helpcenter.tuihuo1"></h3>
+								<h4 v-text="helpcenter.tuihuo2"></h4>
+								<p v-text="helpcenter.tuihuo3"></p>
+								<p v-text="helpcenter.tuihuo4"></p>
+								<p v-text="helpcenter.tuihuo5"></p>
+								<h4 v-text="helpcenter.tuihuo6"></h4>
+								<p v-text="helpcenter.tuihuo7"></p>
+								<h4 v-text="helpcenter.tuihuo8"></h4>
+								<p v-text="helpcenter.tuihuo9"></p>
+								<p v-text="helpcenter.tuihuo10"></p>
+								<h6 v-text="helpcenter.tuihuo11"></h6>
+								<h6 v-text="helpcenter.tuihuo12"></h6>
+								<h6 v-text="helpcenter.tuihuo13"></h6>
+								<h6 v-text="helpcenter.tuihuo14"></h6>
+								<h6 v-text="helpcenter.tuihuo15"></h6>
+								<p v-text="helpcenter.tuihuo16"></p>
+								<h6 v-text="helpcenter.tuihuo17"></h6>
+								<h6 v-text="helpcenter.tuihuo18"></h6>
+								<h6 v-text="helpcenter.tuihuo19"></h6>
+								<h6 v-text="helpcenter.tuihuo20"></h6>
+								<h6 v-text="helpcenter.tuihuo21"></h6>
+								<!-- <h4 v-text="helpcenter.tuihuo22"></h4>
+								<p v-text="helpcenter.tuihuo23"></p>
+								<p v-text="helpcenter.tuihuo24"></p>
+								<p v-text="helpcenter.tuihuo25"></p>
+								<p v-text="helpcenter.tuihuo26"></p>
+								<p v-text="helpcenter.tuihuo27"></p> -->
+								<h4 v-text="helpcenter.tuihuo28"></h4>
+								<p v-text="helpcenter.tuihuo29"></p>
+								<p v-text="helpcenter.tuihuo30"></p>
+								<p v-text="helpcenter.tuihuo31"></p>
+								<p v-text="helpcenter.tuihuo32"></p>
+								<p v-text="helpcenter.tuihuo33"></p>
+								<h4 v-text="helpcenter.tuihuo34"></h4>
+								<p v-text="helpcenter.tuihuo35"></p>
+								<p v-text="helpcenter.tuihuo36"></p>
+								<p v-text="helpcenter.tuihuo37"></p>
+								<p v-text="helpcenter.tuihuo38"></p>
+								<p v-text="helpcenter.tuihuo39"></p>
+								<p v-text="helpcenter.tuihuo40"></p>
+								<h4 v-text="helpcenter.tuihuo41"></h4>
+								<p v-text="helpcenter.tuihuo42"></p>
+								<p v-text="helpcenter.tuihuo43"></p>
+								<p v-text="helpcenter.tuihuo44"></p>
+								<h4 v-text="helpcenter.tuihuo45"></h4>
+								<p v-text="helpcenter.tuihuo46"></p>
+								<p v-text="helpcenter.tuihuo47"></p>
+								<p v-text="helpcenter.tuihuo48"></p>
+								<p v-text="helpcenter.tuihuo49"></p>
+							</el-tab-pane>
+							<!-- <el-tab-pane label="安全性">
+								<h3>帐号安全</h3>
+								<h4>设置新密码</h4>
+								<p>通过旧密码或者邮箱验证设置新密码</p>
+								<h4>绑定邮箱</h4>
+								<p>通过邮箱验证进行邮箱绑定，安全性提到高级</p>
+							</el-tab-pane> -->
+							<!-- <el-tab-pane :label="sfLang.help4">
+								<h3>售后服务</h3>
+								<h4>变化和回报的过程。</h4>
+								<p>1.登录并单击订单列表。</p>
+								<p>2.选择要应用售后服务的产品>订单详细信息。</p>
+								<p>3.检查正确的信息，然后单击售后服务。</p>
+								<p>4.选择所需的类型，返回原因以及说明，然后上传不少于2张图片。（产品有缺陷或收到的产品与来自ElvenShop的订单和订单收据不符）提交请求以供考虑。</p>
+								<h4>后者直接联系在线客服进行处理</h4>
+							</el-tab-pane> -->
+							<!-- <el-tab-pane label="校验">
+					<h3>验证</h3>
+					<h4>1.分期付款所需文件</h4>
+					<p>用户应在注册系统中使用国民身份证的照片，国民身份证拍摄的照片以及验证文件进行验证。当客户在注册过程中完成填写信息时，应在两（2）-三（3）个工作日（不包括星期六，星期日和公共假期）内检查此类信息的分期批准。如果此类信息不符合评估标准，则要求用户再次在注册系统中编辑或完成验证。</p>
+					<h4>2.如何在Elven上验证信息</h4>
+					<p>在www.ElvenShop.com上的注册过程中，最近加入的验证是：当用户想购买产品作为分期付款选项时，要求用户使用公司定义的必需文件来确认验证。系统应自动检查用户信息。检验过程完成后，用户将能够购买产品作为分期付款选项。</p>
+					<h4>3.如何验证系统中的信息</h4>
+					<p>如果用户想购买产品作为分期付款方式，则要求用户在www.ElvenShop.com上注册， 以使用公司定义的必需文件来验证信息。应在两（2）-三（3）个工作日（不包括周六，周日和公共假期）内检查信息以进行分批批准。如果此类信息不符合评估标准，则要求用户再次在注册系统中编辑或完成验证。</p>
+					<h4>4.批准分期付款注册请求的期限</h4>
+					<p>公司需要两（2）-三（3）天（不包括周六，周日和公众假期）来检查分期付款注册请求。</p>
+				</el-tab-pane> -->
+							<el-tab-pane disabled :label="sfLang.us2"></el-tab-pane>
+							<el-tab-pane :label="sfLang.us1">
+								<h3 v-text="helpcenter.about1"></h3>
+								<p v-text="helpcenter.about2"></p>
+								<h4 v-text="helpcenter.about3"></h4>
+								<p v-text="helpcenter.about4"></p>
+								<h4 v-text="helpcenter.about5"></h4>
+								<p v-text="helpcenter.about6"></p>
+								<p v-text="helpcenter.about7"></p>
+								<p v-text="helpcenter.about8"></p>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.time1">
+								<h3 v-text="helpcenter.lianxi1"></h3>
+								<p v-text="helpcenter.lianxi2"></p>
+								<p v-text="helpcenter.lianxi3"></p>
+								<p v-text="helpcenter.lianxi4"></p>
+								<p v-text="helpcenter.lianxi5"></p>
+								<p v-text="helpcenter.lianxi6"></p>
+								<h5 v-text="helpcenter.lianxi7"></h5>
+								<h5 v-text="helpcenter.lianxi8"></h5>
+								<p v-text="helpcenter.lianxi9"></p>
+							</el-tab-pane>
+							<el-tab-pane :label="sfLang.us3">
+								<h3 v-text="helpcenter.yinsi1"></h3>
+								<p v-text="helpcenter.yinsi2"></p>
+								<p v-text="helpcenter.yinsi3"></p>
+								<p v-text="helpcenter.yinsi4"></p>
+								<p v-text="helpcenter.yinsi5"></p>
+								<p v-text="helpcenter.yinsi6"></p>
+								<h4 v-text="helpcenter.yinsi7"></h4>
+								<p v-text="helpcenter.yinsi8"></p>
+								<h6 v-text="helpcenter.yinsi9"></h6>
+								<h6 v-text="helpcenter.yinsi10"></h6>
+								<h6 v-text="helpcenter.yinsi11"></h6>
+								<h6 v-text="helpcenter.yinsi12"></h6>
+								<h6 v-text="helpcenter.yinsi13"></h6>
+								<h6 v-text="helpcenter.yinsi14"></h6>
+								<h6 v-text="helpcenter.yinsi15"></h6>
+								<h6 v-text="helpcenter.yinsi16"></h6>
+								<h6 v-text="helpcenter.yinsi17"></h6>
+								<h6 v-text="helpcenter.yinsi18"></h6>
+								<p v-text="helpcenter.yinsi19"></p>
+								<p v-text="helpcenter.yinsi20"></p>
+								<p v-text="helpcenter.yinsi21"></p>
+								<p v-text="helpcenter.yinsi22"></p>
+								<h4 v-text="helpcenter.yinsi23"></h4>
+								<p v-text="helpcenter.yinsi24"></p>
+								<h6 v-text="helpcenter.yinsi25"></h6>
+								<h6 v-text="helpcenter.yinsi26"></h6>
+								<h6 v-text="helpcenter.yinsi27"></h6>
+								<h6 v-text="helpcenter.yinsi28"></h6>
+								<h6 v-text="helpcenter.yinsi29"></h6>
+								<h6 v-text="helpcenter.yinsi30"></h6>
+								<h6 v-text="helpcenter.yinsi31"></h6>
+								<h6 v-text="helpcenter.yinsi32"></h6>
+								<h6 v-text="helpcenter.yinsi33"></h6>
+								<p v-text="helpcenter.yinsi34"></p>
+								<p v-text="helpcenter.yinsi35"></p>
+								<h4 v-text="helpcenter.yinsi36"></h4>
+								<p v-text="helpcenter.yinsi37"></p>
+								<h4 v-text="helpcenter.yinsi38"></h4>
+								<p v-text="helpcenter.yinsi39"></p>
+								<h4 v-text="helpcenter.yinsi40"></h4>
+								<p v-text="helpcenter.yinsi41"></p>
+								<p v-text="helpcenter.yinsi42"></p>
+								<h4 v-text="helpcenter.yinsi43"></h4>
+								<p v-text="helpcenter.yinsi44"></p>
+								<h6 v-text="helpcenter.yinsi45"></h6>
+								<h6 v-text="helpcenter.yinsi46"></h6>
+								<h6 v-text="helpcenter.yinsi47"></h6>
+								<p v-text="helpcenter.yinsi48"></p>
+								<p v-text="helpcenter.yinsi49"></p>
+								<p v-text="helpcenter.yinsi50"></p>
+								<h4 v-text="helpcenter.yinsi51"></h4>
+								<p v-text="helpcenter.yinsi52"></p>
+								<p v-text="helpcenter.yinsi53"></p>
+								<p v-text="helpcenter.yinsi54"></p>
+								<h6 v-text="helpcenter.yinsi55"></h6>
+								<h6 v-text="helpcenter.yinsi56"></h6>
+								<h6 v-text="helpcenter.yinsi57"></h6>
+								<h6 v-text="helpcenter.yinsi58"></h6>
+								<h6 v-text="helpcenter.yinsi59"></h6>
+								<p v-text="helpcenter.yinsi60"></p>
+								<p v-text="helpcenter.yinsi61"></p>
+								<p v-text="helpcenter.yinsi62"></p>
+								<p v-text="helpcenter.yinsi63"></p>
+								<p v-text="helpcenter.yinsi64"></p>
+								<h4 v-text="helpcenter.yinsi65"></h4>
+								<p v-text="helpcenter.yinsi66"></p>
+								<h4 v-text="helpcenter.yinsi67"></h4>
+								<p v-text="helpcenter.yinsi68"></p>
+								<h4 v-text="helpcenter.yinsi69"></h4>
+								<p v-text="helpcenter.yinsi70"></p>
+							</el-tab-pane>
+							<el-tab-pane disabled :label="sfLang.time2"></el-tab-pane>
+							<el-tab-pane :label="sfLang.time3">
+								<h3 v-text="helpcenter.xieyi1"></h3>
+								<h5 v-text="helpcenter.xieyi2"></h5>
+								<p v-text="helpcenter.xieyi2"></p>
+								<h4 v-text="helpcenter.xieyi4"></h4>
+								<p v-text="helpcenter.xieyi5"></p>
+								<p v-text="helpcenter.xieyi6"></p>
+								<p v-text="helpcenter.xieyi7"></p>
+								<h4 v-text="helpcenter.xieyi8"></h4>
+								<p v-text="helpcenter.xieyi9"></p>
+								<p v-text="helpcenter.xieyi10"></p>
+								<p v-text="helpcenter.xieyi11"></p>
+								<p v-text="helpcenter.xieyi12"></p>
+								<h4 v-text="helpcenter.xieyi13"></h4>
+								<p v-text="helpcenter.xieyi14"></p>
+								<p v-text="helpcenter.xieyi15"></p>
+								<h6 v-text="helpcenter.xieyi16"></h6>
+								<h6 v-text="helpcenter.xieyi17"></h6>
+								<h6 v-text="helpcenter.xieyi18"></h6>
+								<h6 v-text="helpcenter.xieyi19"></h6>
+								<h6 v-text="helpcenter.xieyi20"></h6>
+								<p v-text="helpcenter.xieyi21"></p>
+								<h4 v-text="helpcenter.xieyi22"></h4>
+								<p v-text="helpcenter.xieyi23"></p>
+								<p v-text="helpcenter.xieyi24"></p>
+								<h6 v-text="helpcenter.xieyi25"></h6>
+								<h6 v-text="helpcenter.xieyi26"></h6>
+								<h6 v-text="helpcenter.xieyi27"></h6>
+								<h4 v-text="helpcenter.xieyi28"></h4>
+								<p v-text="helpcenter.xieyi29"></p>
+								<p v-text="helpcenter.xieyi30"></p>
+								<p v-text="helpcenter.xieyi31"></p>
+								<h4 v-text="helpcenter.xieyi32"></h4>
+								<p v-text="helpcenter.xieyi33"></p>
+								<h4 v-text="helpcenter.xieyi34"></h4>
+								<p v-text="helpcenter.xieyi35"></p>
+								<h6 v-text="helpcenter.xieyi36"></h6>
+								<h6 v-text="helpcenter.xieyi37"></h6>
+								<h6 v-text="helpcenter.xieyi38"></h6>
+								<h6 v-text="helpcenter.xieyi39"></h6>
+								<p v-text="helpcenter.xieyi40"></p>
+								<p v-text="helpcenter.xieyi41"></p>
+								<h4 v-text="helpcenter.xieyi42"></h4>
+								<p v-text="helpcenter.xieyi43"></p>
+								<p v-text="helpcenter.xieyi44"></p>
+								<h4 v-text="helpcenter.xieyi45"></h4>
+								<p v-text="helpcenter.xieyi46"></p>
+								<p v-text="helpcenter.xieyi47"></p>
+								<p v-text="helpcenter.xieyi48"></p>
+								<h5 v-text="helpcenter.xieyi49"></h5>
+							</el-tab-pane>
+						</el-tabs>
+					</div>
+				</div>
+			</article>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/help.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+</html>

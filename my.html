@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/myStyle.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | ศูนย์บุคคล</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="my" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<article id="itany">
+					<section class="header-logo">
+						<div>
+							<div class="header-left">
+								<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+								<div @click="toIndexPage" class="hand">
+									<p>ELVENSHOP</p>
+									<p>Quick and convenient</p>
+								</div>
+							</div>
+							<div class="search">
+								<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+								<span></span>
+								<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+								<nav class="sfhot-words" v-show="sfhistory">
+									<ul class="sfhot-words-list">
+										<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+											<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+											<span v-text="sfLang.sfserhis"></span>
+										</li>
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</section>
+					<div style="clear: both;"></div>
+					<section class="container">
+						<!-- 左侧菜单 -->
+						<div class="container-page">
+							<ul>
+								<li></li>
+								<li @click="handleOption(0)" :class="{active: type == 0, sett: type == 0}"><i class="fontStyle" v-text="sfLang.safeSet"></i><span></span></li>
+								<li @click="handleOption(1)" :class="{active: type == 1, pers: type == 1}"><i class="fontStyle" v-text="sfLang.personMsg"></i><span></span></li>
+								<li @click="handleOption(2)" :class="{active: type == 2, addr: type == 2}"><i class="fontStyle" v-text="sfLang.addrMsg"></i><span></span></li>
+							</ul>
+						</div>
+						<!-- 个人信息设置 -->
+						<div class="container-body" v-show="type == 0">
+							<div class="container-body-header">
+								<div class="body-header">
+									<p class="basic" v-text="sfLang.baseMsg"></p>
+									<p class="acc-name">
+										<i class="fontStyle" v-text="sfLang.accountName+':'"></i>
+										<input type="text" @blur="blurInfo1" @focus="focusInfo1" v-model="userNameMsg.data.F_PetNameUser" maxlength="20" class="sfusername" :placeholder="userData.userName"/>
+									</p>
+									<p class="log-email">
+										<i class="fontStyle" v-text="sfLang.accountEmail+':'"></i>
+										<input type="text"  @blur="blurInfo2" @focus="focusInfo2" v-model="userNameMsg.data.F_UserEmail" class="sfuseremail"/>
+									</p>
+									<p class="infoSave" v-text="sfLang.save" @click="editInfoMsg"></p>
+								</div>
+								<div class="body-body">
+									<p v-text="sfLang.safeService"></p>
+									<div>
+										<li class="secur" v-text="sfLang.safeLevel"></li>
+										<li class="high" style="margin-left: 0.5rem;" v-text="progress.level"></li>
+										<li class="jindu">
+											<div class="progress-outer">
+												<div class="progress-inner">
+													<div class="progress-bg" :style="{ width: progress.width + '%' }"></div>
+												</div>
+											</div>
+											<div></div>
+										</li>
+										<li class="warn"><span></span><i class="fontStyle" v-text="sfLang.emailSafe"></i></li>
+									</div>
+								</div>
+							</div>
+							<!-- <div style="clear: both;"></div> -->
+							<!-- 修改密码 -->
+							<div class="anquan">
+								<li class="anquan-img">
+									<img src="images/my/fin.png" alt="">
+									<p v-text="sfLang.setted"></p>
+								</li>
+								<li class="anquan-pwd">
+									<p v-text="sfLang.changePwd"></p>
+								</li>
+								<li class="anquan-msg">
+									<p v-text="sfLang.setPwdTip"></p>
+								</li>
+								<li class="anquan-name">
+									<p class="changepwd" @click="dialogPwdVisible = true" v-text="sfLang.edit"></p>
+								</li>
+								<el-dialog :title="sfLang.changePwd" :visible.sync="dialogPwdVisible" width="40%" top="15%" @close="closeDialog(1)">
+									<el-form label-width="140px" size="small">
+										<el-form-item :label="sfLang.oldPwd">
+											<el-input type="password" v-model="userMsg.data.F_OldPassWord" autocomplete="off" :placeholder='sfLang.sfmima' maxlength='20' show-password></el-input>
+										</el-form-item>
+										<el-form-item :label="sfLang.newPwd">
+											<el-input type="password" v-model="userMsg.data.F_PassWord" autocomplete="off" :placeholder='sfLang.newPwdTip' maxlength='20' show-password></el-input>
+										</el-form-item>
+										<el-form-item :label="sfLang.confirmPwd">
+											<el-input type="password" v-model="confirmPwd" autocomplete="off" :placeholder='sfLang.confirmPwdTip' maxlength='20' show-password></el-input>
+										</el-form-item>
+									</el-form>
+									<div slot="footer" class="dialog-footer">
+										<el-button size="small " @click="closeDialog(1)" v-text="sfLang.cancel"></el-button>
+										<el-button class="sfbtn" size="small" @click="editPassword" v-text="sfLang.sure"></el-button>
+									</div>
+								</el-dialog>
+							</div>
+							<!-- 邮箱验证 -->
+							<div class="anquan">
+								<li class="anquan-img" v-if="progress.width == 50">
+									<img src="images/my/fin-bg.png" alt="">
+									<p v-text="sfLang.emailNoneAuth"></p>
+								</li>
+								<li class="anquan-img" v-else>
+									<img src="images/my/fin.png" alt="">
+									<p v-text="sfLang.emailHasAuth"></p>
+								</li>
+								<li class="anquan-pwd">
+									<p v-text="sfLang.emailAuth"></p>
+								</li>
+								<li class="anquan-msg">
+									<p v-text="sfLang.emailTip"></p>
+								</li>
+								<li class="anquan-name" v-if="progress.width == 50">
+									<p class="certification" @click="dialogEmailVisible = true" v-text="sfLang.auth"></p>
+								</li>
+								<el-dialog :title="sfLang.emailAuth" :visible.sync="dialogEmailVisible" width="40%" top="18%" @close="closeDialog(2)">
+									<el-form label-width="100px" :inline="true">
+										<el-form-item :label="sfLang.email" size="small">
+											<el-input v-model="emailMsg.data.F_UserEmail" autocomplete="off"></el-input>
+										</el-form-item>
+										<el-form-item size="small">
+											<el-button :disabled="canClick" @click="sendEmail" v-text="sfLang.send"></el-button>
+										</el-form-item>
+										<el-form-item :label="sfLang.code" size="small">
+											<el-input v-model="codeMsg.data.F_SendEmailCode" autocomplete="off" width="100px"></el-input>
+										</el-form-item>
+									</el-form>
+									<div slot="footer" class="dialog-footer">
+										<el-button size="small " @click="closeDialog(2)" v-text="sfLang.cancel"></el-button>
+										<el-button size="small" @click="emailVerify" v-text="sfLang.sure"></el-button>
+									</div>
+								</el-dialog>
+							</div>
+						</div>
+						<!-- 个人信息 更改头像 -->
+						<div class="container-body-per" v-show="type == 1">
+							<div class="cbp-top">
+								<p v-text="sfLang.avatar"></p>
+								<div class="upload-img" v-loading="loading"><img :src="userData.userPhoto" alt=""></div>
+								<el-upload action='' :on-change='getFile' :auto-upload="false" accept=".jpg,.jpeg,.png,.JPG,.JPEG"
+								 :show-file-list="false">
+									<el-button size="small" style="background-color: #ff5230; color: #fff;" v-text="sfLang.upload"></el-button>
+									<el-button :disabled="isupload" size="small" @click.stop="saveUserPhoto" v-text="sfLang.save"></el-button>
+								</el-upload>
+							</div>
+						</div>
+						<!-- 地址管理 -->
+						<div class="container-body-add" v-show="type == 2">
+							<p class="curr" v-text="sfLang.address"></p>
+							<el-form :model="addressForm.data" label-width="120px" size="small" ref="addressForm">
+								<el-form-item :label="sfLang.receiveName" prop="F_ReceiveName" :rules="{ required: true, message: sfLang.receiveNameTip, trigger: 'blur' }">
+									<el-input v-model="addressForm.data.F_ReceiveName" :placeholder="sfLang.receiveNameTip" maxlength='26'></el-input>
+								</el-form-item>
+								<el-form-item :label="sfLang.receiveTel" prop="F_ReceiveTel" :rules="[
+								         { required: true, message: sfLang.receiveTelTip, trigger: 'blur'},
+								         { validator: validateAddPhone, trigger: 'blur' }
+								        ]">
+									<el-input v-model="addressForm.data.F_ReceiveTel" :placeholder="sfLang.receiveTelTip" maxlength="20"></el-input>
+								</el-form-item>
+								<el-form-item :label="sfLang.receiveEmail" prop="F_ReceiveEmail" :rules="[
+									{ required: false, message: sfLang.receiveEmailTip, trigger: 'blur' },
+									{ type: 'email', message: sfLang.receiveEmailtype, trigger: 'blur' }
+								]">
+									<el-input v-model="addressForm.data.F_ReceiveEmail" :placeholder="sfLang.receiveEmailTip" maxlength='50'></el-input>
+								</el-form-item>
+								<!-- <el-form-item :label="sfLang.receiveEmail">
+									<el-input v-model="addressForm.data.F_ReceiveEmail" :placeholder="sfLang.receiveEmailTip" maxlength='50'></el-input>
+								</el-form-item> -->
+								<el-row>
+									<el-col :span="8">
+										<el-form-item :label="sfLang.receiveCountry" prop="F_ReceiveCountry" :rules="{ required: true, message: sfLang.receiveCountryTip, trigger: 'blur' }">
+											<el-select v-model="addressForm.data.F_ReceiveCountry" filterable :placeholder="sfLang.receiveCountryTip" @change="changeCountry">
+												<el-option label="Thailand" value="Thailand"></el-option>
+												<el-option label="United States of America" value="United States of America"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8" v-if="provinceData.length != 0">
+										<el-form-item :label="sfLang.receiveProvince" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip, trigger: 'blur' }">
+											<el-select v-model="addressForm.data.F_ReceiveProvince" filterable :placeholder="sfLang.receiveProvinceTip" @change="changeProvince" :no-data-text="sfLang.none">
+												<el-option v-for="(item, index) in provinceData" :key="index" :label="item" :value="item"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8" v-if="provinceData.length != 0">
+										<el-form-item :label="sfLang.receiveCity" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveCityTip, trigger: 'blur' }">
+											<el-select v-model="addressForm.data.F_ReceiveCity" filterable :placeholder="sfLang.receiveCityTip" :no-data-text="sfLang.none">
+												<el-option v-for="(item, index) in cityData" :key="index" :label="item" :value="item"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-form-item v-if="provinceData.length == 0" :label="sfLang.receiveProvince" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip, trigger: 'blur' }">
+									<el-input v-model="addressForm.data.F_ReceiveProvince" :placeholder="sfLang.receiveProvinceTip"></el-input>
+								</el-form-item>
+								<el-form-item v-if="provinceData.length == 0" :label="sfLang.receiveCity" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveCityTip, trigger: 'blur' }">
+									<el-input v-model="addressForm.data.F_ReceiveCity" :placeholder="sfLang.receiveCityTip" maxlength='50'></el-input>
+								</el-form-item>
+								<el-form-item :label="sfLang.receiveComName">
+									<el-input v-model="addressForm.data.F_ReceiveComName" :placeholder="sfLang.receiveComNameTip" maxlength='50'></el-input>
+								</el-form-item>
+								<el-form-item :label="sfLang.receiveCode" prop="F_ReceiveCode" :rules="{ required: true, message: sfLang.receiveCodeTip, trigger: 'blur' }">
+									<el-input v-model="addressForm.data.F_ReceiveCode" :placeholder="sfLang.receiveCodeTip" maxlength='20'></el-input>
+								</el-form-item>
+								<el-form-item :label="sfLang.receiveAddress" prop="F_ReceiveAddress" :rules="{ required: true, message: sfLang.receiveAddressTip, trigger: 'blur' }">
+									<el-input type="textarea" :rows=2 v-model="addressForm.data.F_ReceiveAddress" :placeholder="sfLang.receiveAddressTip" maxlength='100'></el-input>
+								</el-form-item>
+								<el-form-item>
+									<el-checkbox v-model="addressForm.data.F_IsDefalut" true-label="1" false-label="0" :label="sfLang.setAddress"></el-checkbox>
+								</el-form-item>
+								<el-form-item>
+									<el-button @click="addAddress('addressForm')" v-text="sfLang.save"></el-button>
+								</el-form-item>
+							</el-form>
+							<el-table border :data="addressData" :empty-text="sfLang.noneData" style="font-size: 13px;">
+								<el-table-column fixed="left" width="110" prop="f_ReceiveName" :label="sfLang.receiveName"></el-table-column>
+								<el-table-column width="110" prop="f_ReceiveTel" :label="sfLang.receiveTel"></el-table-column>
+								<el-table-column width="150" prop="f_ReceiveEmail" :label="sfLang.receiveEmail"></el-table-column>
+								<el-table-column width="90" prop="f_ReceiveCountry" :label="sfLang.receiveCountry"></el-table-column>
+								<el-table-column width="100" prop="f_ReceiveProvince" :label="sfLang.receiveProvince"></el-table-column>
+								<el-table-column width="100" prop="f_ReceiveCity" :label="sfLang.receiveCity"></el-table-column>
+								<el-table-column width="100" prop="f_ReceiveComName" :label="sfLang.receiveComName"></el-table-column>
+								<el-table-column width="100" prop="f_ReceiveCode" :label="sfLang.receiveCode"></el-table-column>
+								<el-table-column width="200" prop="f_ReceiveAddress" :label="sfLang.receiveAddress"></el-table-column>
+								<el-table-column fixed="right" :label="sfLang.operateTable" width="290">
+									<template slot-scope="scope">
+										<el-button-group>
+											<el-button @click="editDialogAddress(scope.row)" type="primary" size="small" v-text="sfLang.editTable"></el-button>
+											<el-button @click="delAddress(scope.row)" type="danger" size="small" v-text="sfLang.delTable"></el-button>
+											<el-button type="warning" size="small" v-if="scope.row.f_IsDefalut == 1" v-text="sfLang.defaultTable"></el-button>
+											<el-button @click="setAddress(scope.row)" size="small" v-else v-text="sfLang.defaultTableText"></el-button>
+										</el-button-group>
+									</template>
+								</el-table-column>
+							</el-table>
+							<!-- 地址编辑 -->
+							<el-dialog :title="sfLang.editTable" :visible.sync="editDialogVisible">
+								<el-form :model="addressEditForm.data" label-width="120px" size="small" ref="addressEditForm">
+									<el-form-item :label="sfLang.receiveName" prop="F_ReceiveName" :rules="{ required: true, message: sfLang.receiveNameTip, trigger: 'blur' }">
+										<el-input v-model="addressEditForm.data.F_ReceiveName" :placeholder="sfLang.receiveNameTip" maxlength='26'></el-input>
+									</el-form-item>
+									<el-form-item :label="sfLang.receiveTel" prop="F_ReceiveTel" :rules="[
+									          { required: true, message: sfLang.receiveTelTip, trigger: 'blur'},
+														{ validator: validateEditPhone, trigger: 'blur' }
+									         ]">
+										<el-input v-model="addressEditForm.data.F_ReceiveTel" :placeholder="sfLang.receiveTelTip" maxlength="20"></el-input>
+									</el-form-item>
+									<el-form-item :label="sfLang.receiveEmail" prop="F_ReceiveEmail" :rules="[
+										{ required: false, message: sfLang.receiveEmailTip, trigger: 'blur' },
+										{ type: 'email', message: sfLang.receiveEmailtype, trigger: 'blur' }
+									]">
+										<el-input v-model="addressEditForm.data.F_ReceiveEmail" :placeholder="sfLang.receiveEmailTip" maxlength='50'></el-input>
+									</el-form-item>
+									<!-- <el-form-item :label="sfLang.receiveEmail">
+										<el-input v-model="addressEditForm.data.F_ReceiveEmail" :placeholder="sfLang.receiveEmailTip" maxlength='50'></el-input>
+									</el-form-item> -->
+									
+									<el-row>
+										<el-col :span="8">
+											<el-form-item :label="sfLang.receiveCountry" prop="F_ReceiveCountry" :rules="{ required: true, message: sfLang.receiveCountryTip, trigger: 'change' }">
+												<el-select v-model="addressEditForm.data.F_ReceiveCountry" filterable :placeholder="sfLang.receiveCountryTip" @change="editCountry">
+													<el-option label="Thailand" value="Thailand"></el-option>
+													<el-option label="United States of America" value="United States of America"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-if="provinceData.length != 0">
+											<el-form-item :label="sfLang.receiveProvince" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip, trigger: 'change' }">
+												<el-select v-model="addressEditForm.data.F_ReceiveProvince" filterable :placeholder="sfLang.receiveProvinceTip" @change="editProvince" :no-data-text="sfLang.none">
+													<el-option v-for="(item, index) in provinceData" :key="index" :label="item" :value="item"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-if="provinceData.length != 0">
+											<el-form-item :label="sfLang.receiveCity" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveCityTip, trigger: 'change' }">
+												<el-select v-model="addressEditForm.data.F_ReceiveCity" filterable :placeholder="sfLang.receiveCityTip" :no-data-text="sfLang.none" @focus="editCity($event)">
+													<el-option v-for="(item, index) in cityData" :key="index" :label="item" :value="item"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-form-item  v-if="provinceData.length == 0" :label="sfLang.receiveProvince" prop="F_ReceiveProvince" :rules="{ required: true, message: sfLang.receiveProvinceTip, trigger: 'blur' }">
+										<el-input v-model="addressEditForm.data.F_ReceiveProvince" :placeholder="sfLang.receiveProvinceTip"></el-input>
+									</el-form-item>
+									<el-form-item v-if="provinceData.length == 0" :label="sfLang.receiveCity" prop="F_ReceiveCity" :rules="{ required: true, message: sfLang.receiveCityTip, trigger: 'blur' }">
+										<el-input v-model="addressEditForm.data.F_ReceiveCity" :placeholder="sfLang.receiveCityTip" maxlength='50'></el-input>
+									</el-form-item>
+									<el-form-item :label="sfLang.receiveComName">
+										<el-input v-model="addressEditForm.data.F_ReceiveComName" :placeholder="sfLang.receiveComNameTip" maxlength='50'></el-input>
+									</el-form-item>
+									<el-form-item :label="sfLang.receiveCode"  prop="F_ReceiveCode" :rules="{ required: true, message: sfLang.receiveCodeTip, trigger: 'blur' }">
+										<el-input v-model="addressEditForm.data.F_ReceiveCode" :placeholder="sfLang.receiveCodeTip" maxlength='20'></el-input>
+									</el-form-item>
+									<el-form-item :label="sfLang.receiveAddress" prop="F_ReceiveAddress" :rules="{ required: true, message: sfLang.receiveAddressTip, trigger: 'blur' }">
+										<el-input type="textarea" :rows=2 v-model="addressEditForm.data.F_ReceiveAddress" :placeholder="sfLang.receiveAddressTip" maxlength='100'></el-input>
+									</el-form-item>
+									<el-form-item>
+										<el-checkbox v-if="addressEditForm.data.F_IsDefalut == 1" checked v-model="addressEditForm.data.F_IsDefalut"
+										 true-label="1" false-label="0" :label="sfLang.setAddress"></el-checkbox>
+										<el-checkbox v-else v-model="addressEditForm.data.F_IsDefalut" true-label="1" false-label="0" :label="sfLang.setAddress"></el-checkbox>
+									</el-form-item>
+								</el-form>
+								<div slot="footer" class="dialog-footer">
+									<el-button @click="closeDialog(3)" size="small" v-text="sfLang.cancel"></el-button>
+									<el-button @click="editAddress('addressEditForm')" size="small" v-text="sfLang.sure"></el-button>
+								</div>
+							</el-dialog>
+						</div>
+					</section>
+				</article>
+				<div id="dibu" class="dibu"></div>
+				<footer class="footer" id="footer"></footer>
+			</div>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<!-- <script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/thailand.js" type="text/javascript"></script>
+	<script src="js/my.js" type="text/javascript" charset="utf-8"></script>
+</html>

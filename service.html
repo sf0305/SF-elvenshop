@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" href="css/serviceStyle.css">
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | เว็บบอร์ด</title>
+		<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.signalR-2.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+		<header class="header" id="header">
+			<header-nav></header-nav>
+		</header>
+		<article>
+			<div class="chatWindow"  id="service" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div class="chatWindow-header" v-text="sfLang.online"></div>
+				<div class="chatWindow-body">
+					<div class="chatWindow-body-body">
+						<div class="chatBody chat-main" v-loading="loading">
+							<ul>
+								<li v-for="(item, index) in chatInfo" :key="index" :class="{chatMine: item.f_MessageRole == 0, chatIm: item.f_MessageRole == 1}">
+									<div v-if="item.f_MessageRole == 0 || item.f_MessageRole == 1">
+										<div class="chat-user">
+											<img v-if="item.f_MessageRole == 0" :src="userIcon" alt="">
+											<img v-if="item.f_MessageRole == 1" src="images/service/serviceIcon.png" alt="">
+											<cite v-if="item.f_MessageRole == 0">
+												<i>{{item.f_CreateDate}}</i>
+												{{item.f_CustomerName}}
+											</cite>
+											<cite v-if="item.f_MessageRole == 1">
+												<i>{{item.f_CreateDate}}</i>
+												{{item.f_ServiceName}}
+											</cite>
+										</div>
+										<div class="chat-text" v-if="item.f_Message != ''" v-text="item.f_Message"></div>
+										<div class="chat-pic" v-else>
+											<img :src="item.f_PicUrl+'?imageView/2/w/120/h/100'" @error="imgError" @click="handleImg(item.f_PicUrl)">
+										</div>
+									</div>
+									<div v-else class="wrapper">
+										<div class="container" v-if="proShow">
+											<div class="left" @click="toDetailPage(item.f_Id)">
+												<img :src="item.f_MainImageUrl+'?imageView/2/w/80/h/80'">
+											</div>
+											<div class="right">
+												<div class="title" @click="toDetailPage(item.f_Id)">{{item.f_Title}}</div>
+												<div class="old-price">{{currencySign}}{{item.originalPriceRange}}</div>
+												<div class="price">{{currencySign}}{{item.salesPriceRange}}</div>
+											</div>
+										</div>
+										<div class="order-layout" v-else>
+											<div class="orderBox">
+												<div class="order-num">
+													<span v-text="sfLang.ordnum + ':'"></span><span v-text="item.f_OrderNo" @click="toOrderDetailPage(item.f_OrderNo)"></span>
+												</div>
+												<div class="order-label" v-if="item.f_OrderState == 2" v-text="sfLang.status2"></div>
+												<div class="order-label" v-if="item.f_OrderState == 4" v-text="sfLang.status4"></div>
+												<div class="order-label" v-if="item.f_OrderState == 7" v-text="sfLang.status7"></div>
+												<div class="order-label" v-if="item.f_OrderState == 8" v-text="sfLang.status8"></div>
+												<div class="order-label" v-if="item.f_OrderState == 9" v-text="sfLang.status9"></div>
+												<div class="order-label" v-if="item.f_OrderState == 10" v-text="sfLang.status10"></div>
+											</div>
+											<div class="container" v-for="(item2, index2) in item.orderDetail" :key="index2">
+												<div class="left" @click="toDetailPage(item2.f_MarketingId)">
+													<img :src="item2.f_GoodsImg+'?imageView/2/w/80/h/80'">
+												</div>
+												<div class="right">
+													<div class="title" @click="toDetailPage(item2.f_MarketingId)">{{item2.f_SaleTitle}}</div>
+													<div class="price" style="color: #333;">{{currencySign}}{{item2.f_SalePrice}}</div>
+													<div class="count">x{{item2.f_GoodsNum}}</div>
+												</div>
+											</div>
+											<div class="priceBox">
+												<div class="order-label"></div>
+												<div class="order-price">
+													<span v-text="sfLang.heji + ':'"></span><span v-text="currencySign + '' + item.f_OriginalTotalPrice"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="chat-footer">
+							<div class="chat-tool">
+								<div class="chat-tool-item chat-upload-pic" v-if="isSendImg">
+									<el-upload action="" :on-change='getFile' :auto-upload="false" :show-file-list="false">
+										<span class="el-icon-picture"></span>
+									</el-upload>
+								</div>
+								<div class="chat-tool-item chat-upload-pic" v-else>
+									<el-tooltip class="item" effect="dark" :content="sfLang.uploadTip" placement="top">
+									  <span class="el-icon-picture"></span>
+									</el-tooltip>
+								</div>
+							</div>
+							<div class="chat-textarea">
+								<textarea rows="4"  @input="inputCheck" v-model="chatSendMsg.data.F_Message" @keydown="listen($event)" :placeholder="sfLang.sendText"></textarea>
+							</div>
+							<div class="chat-bottom">
+								<div class="chat-send">
+									<button type="button" :class="{default: sendState}" @click="send" v-text="sfLang.send"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="chatMsg">
+						<p v-text="sfLang.history"></p>
+						<div class="none" v-show="searchFlag" style="text-align: center;padding-top: 110px;">
+							<img src="images/empty-ser.png" >
+							<p v-text="sfLang.none"></p>
+						</div>
+						<div class="layim-chat-main" v-loading="loadingHistory">
+							<ul>
+								<li v-for="(item, index) in chatHistory" :key="index">
+									<div class="layim-chat-user">
+										<img v-if="item.f_MessageRole == 0" :src="userIcon" alt="">
+										<img v-if="item.f_MessageRole == 1" src="images/service/serviceIcon.png" alt="">
+										<cite v-if="item.f_MessageRole == 0">
+											<i class="fontStyle">{{item.f_CreateDate}}</i>
+											{{item.f_CustomerName}}
+										</cite>
+										<cite v-if="item.f_MessageRole == 1">
+											<i class="fontStyle">{{item.f_CreateDate}}</i>
+											{{item.f_ServiceName}}
+										</cite>
+									</div>
+									<div class="layim-chat-text" v-if="item.f_Message != ''">{{item.f_Message}}</div>
+									<div class="layim-chat-pic" v-else>
+										<img :src="item.f_PicUrl+'?imageView/2/w/120/h/100'" @error="imgError" @click="handleImg(item.f_PicUrl)">
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="layui-chat-fenye" style="text-align: center; margin-top: 5px;">
+							<el-pagination layout="prev, next" :total="chatTotal" @current-change="handlePage" :hide-on-single-page="chatPageVisible"></el-pagination>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<div class="sfwrap-bg" :class="{ on : sfwrapon }"></div>
+					<div class="sfwrap-body" :class="{ on : sfwrapon }">
+						<span class="sfwrap-close el-icon-error" @click="sfwrapon = false"></span>
+						<img :src="imgViewUrl" alt="">
+					</div>
+				</div>
+				<!-- <div class="mod-logicbox-mask flexbox middle center">
+					<div class="mod-logicbox-box activity-logicbox">
+						<div class="logicbox-close el-icon-error"></div>
+						<div class="img-wraper flexbox middle center">
+							<a>
+								<img src="https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg" >
+							</a>
+						</div>
+					</div>
+				</div> -->
+			</div>
+		</article>
+		<div class="dibu" id="dibu"></div>
+		<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/service.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+</html>

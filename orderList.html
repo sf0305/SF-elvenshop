@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/collectStyle.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | รายการสั่งซื้อ</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+
+
+			.header-nav-right ul li:nth-child(5) a {
+				color: #ff5230;
+			}
+
+			.header-nav-right ul li:nth-child(5) div {
+				background: url(./images/icon/Order2.png) no-repeat;
+				background-size: 100%;
+			}
+
+			
+		</style>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="collect" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<section class="header-logo">
+					<div>
+						<div class="header-left">
+							<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+							<div @click="toIndexPage" class="hand">
+								<p>ELVENSHOP</p>
+								<p>Quick and convenient</p>
+							</div>
+						</div>
+						<div class="search">
+							<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+							<span></span>
+							<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+							<nav class="sfhot-words" v-show="sfhistory">
+								<ul class="sfhot-words-list">
+									<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+										<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+										<span v-text="sfLang.sfserhis"></span>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</section>
+				<div class="order">
+					<div class="ord">
+						<ul class="order-right">
+							<li class="orederTitle">
+								<p v-text="sfLang.myOrder"></p>
+							</li>
+							<li class="order-r-search">
+								<input type="text" :placeholder="sfLang.orderNum" v-model="orderMsg.data.F_SearchContent">
+								<p @click="searchOrder" v-text="sfLang.search"></p>
+							</li>
+						</ul>
+						<div class="coll">
+							<div class="all">
+								<ul class="title">
+									<li class="til-1" @click="orderTab(0)" v-text="sfLang.all+'('+ statusNum0 +')'"></li>
+									<li class="til-2" @click="orderTab(1)" v-text="sfLang.payment+'('+ statusNum1 +')'"></li>
+									<li class="til-3" @click="orderTab(2)" v-text="sfLang.delivered+'('+ statusNum2 +')'"></li>
+									<li class="til-4" @click="orderTab(3)" v-text="sfLang.received+'('+ statusNum3 +')'"></li>
+									<li class="til-5" @click="orderTab(4)" v-text="sfLang.comment+'('+ statusNum4 +')'"></li>
+									<li class="til-6" @click="orderTab(99)" v-text="sfLang.afterSale+'('+ statusNum5 +')'"></li>
+								</ul>
+								<!-- 全部 -->
+								<ul class="all-all" style="opacity: 1;" v-loading="loading">
+									<li v-for="(item, index) in orderData" :key="index">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-if="item.f_PayType == 1" v-text="sfLang.payway1"></i>
+												<i class="fontStyle" v-else-if="item.f_PayType == 2" v-text="sfLang.payway2"></i>
+												<i class="fontStyle" v-else-if="item.f_PayType == 0" v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp product-item" v-for="(item2, index2) in item.orderDetail" :key="index2">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p v-if="item.f_OrderState == 1" @click.stop="showDialogAddress(item.f_OrderNo, item.f_ReceiveName, item.f_ReceiveTel, item.f_ReceiveAddress)" v-text="sfLang.changeAdd"></p>
+												<p v-if="item.f_OrderState == 1" class="online" @click.stop="toPayPage(item)" v-text="sfLang.pay"></p>
+												<p v-if="item.f_OrderState == 1" @click.stop="cancelOrder(item.f_OrderNo)" v-text="sfLang.cancel"></p>
+												<p v-if="item.f_OrderState == 2 && item.f_PayType == 2" v-text="sfLang.sfMai" style="color: #333;"></p>
+												<p v-if="item.f_OrderState == 2 && item.f_PayType == 1" v-text="sfLang.sfxia" style="color: #333;"></p>
+												<p v-if="item.f_OrderState == 2 && item.f_PayType == 1" class="color6" @click.stop="handleTip(item.f_OrderNo)" v-text="sfLang.changeAdd"></p>
+												<p v-if="item.f_OrderState == 2" class="color6" @click.stop="handleTip(item.f_OrderNo)" v-text="sfLang.cancel"></p>
+												<p v-if="item.f_OrderState == 3" @click.stop="toLogisticsPage(item.f_OrderNo)" v-text="sfLang.viewLog"></p>
+												<p v-if="item.f_OrderState == 4" class="p-border" @click.stop="toCommentPage(item.f_OrderNo)" v-text="sfLang.pingjia"></p>
+												<p v-if="item.f_OrderState == 5" v-text="sfLang.status5"></p>
+												<p v-if="item.f_OrderState == 6" v-text="sfLang.status6" style="color: #aaa;"></p>
+												<p v-if="item.f_OrderState == 7" v-text="sfLang.status7" style="color: #666;"></p>
+												<p v-if="item.f_OrderState == 8" v-text="sfLang.status8" style="color: #666;"></p>
+												<p v-if="item.f_OrderState == 9" v-text="sfLang.status9" style="color: #666;"></p>
+												<p v-if="item.f_OrderState == 10" v-text="sfLang.status10" style="color: #aaa;"></p>
+												<p v-if="item.f_OrderState == 11" @click.stop="applyDialog(item)" v-text="sfLang.refund"></p>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<!-- 待付款 -->
+								<ul class="all-all all-2">
+									<li v-for="(item, index) in orderData" :key="index">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp" v-for="(item2, index2) in item.orderDetail" :key="index2" @click="toOrderPage(item.f_OrderNo)">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p @click.stop="showDialogAddress(item.f_OrderNo, item.f_ReceiveName, item.f_ReceiveTel, item.f_ReceiveAddress)" v-text="sfLang.changeAdd"></p>
+												<p @click.stop="toPayPage(item)" class="online" v-text="sfLang.pay"></p>
+												<p @click.stop="cancelOrder(item.f_OrderNo)" v-text="sfLang.cancel"></p>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<!-- 待发货 -->
+								<ul class="all-all all-2">
+									<li v-for="(item, index) in orderData" :key="index" v-if="item.f_OrderState == 2">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-if="item.f_PayType == 1" v-text="sfLang.payway1"></i>
+												<i class="fontStyle" v-else v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp" v-for="(item2, index2) in item.orderDetail" :key="index2" @click="toOrderPage(item.f_OrderNo)">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p v-if="item.f_PayType == 2" v-text="sfLang.sfMai" style="color: #333;"></p>
+												<p v-if="item.f_PayType == 1" v-text="sfLang.sfxia" style="color: #333;"></p>
+												<p v-if="item.f_PayType == 1" class="color6" @click.stop="handleTip(item.f_OrderNo)" v-text="sfLang.changeAdd"></p>
+												<p class="color6" @click.stop="handleTip(item.f_OrderNo)" v-text="sfLang.cancel"></p>
+												<!-- <p @click.stop="toLogisticsPage(item.f_OrderNo)" v-text="sfLang.viewLog"></p> -->
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<!-- 待收货 -->
+								<ul class="all-all all-2">
+									<li v-for="(item, index) in orderData" :key="index" @click="toOrderPage(item.f_OrderNo)">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-if="item.f_PayType == 1" v-text="sfLang.payway1"></i>
+												<i class="fontStyle" v-else v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp" v-for="(item2, index2) in item.orderDetail" :key="index2">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p @click.stop="toLogisticsPage(item.f_OrderNo)" v-text="sfLang.viewLog"></p>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<!-- 待评价 -->
+								<ul class="all-all all-2">
+									<li v-for="(item, index) in orderData" :key="index" v-if="item.f_OrderState == 4">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-if="item.f_PayType == 1" v-text="sfLang.payway1"></i>
+												<i class="fontStyle" v-else v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp" v-for="(item2, index2) in item.orderDetail" :key="index2">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p class="p-border" @click="toCommentPage(item.f_OrderNo)" v-text="sfLang.pingjia"></p>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<!-- 售后/退款 -->
+								<ul class="all-all all-2">
+									<li v-for="(item, index) in orderData" :key="index">
+										<div class="head-content">
+											<p v-text="item.f_OrderCreateTime"></p>
+											<p>
+												<span v-text="sfLang.ordnum + ': '"></span>
+												<span class="order-no" v-text="item.f_OrderNo" @click="toOrderPage(item.f_OrderNo)"></span>
+											</p>
+											<p>
+												<i class="fontStyle" v-text="sfLang.payway + ': '"></i>
+												<i class="fontStyle" v-if="item.f_PayType == 1" v-text="sfLang.payway1"></i>
+												<i class="fontStyle" v-else v-text="sfLang.payway2"></i>
+											</p>
+											<nav class="elevnService" @click="toService(item.f_OrderNo)">
+												<img src="./images/details/kefu.png" alt="">
+												<span v-text="sfLang.sfkefu"></span>
+											</nav>
+										</div>
+										<ul class="all-sp" v-for="(item2, index2) in item.orderDetail" :key="index2">
+											<li>
+												<span><img :src="item2.f_GoodsImg+'?imageView/2/w/110/h/110'" alt="" @click="toDetailPage(item2.f_MarketingId)"></span>
+											</li>
+											<li>
+												<div class="title-box">
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_SaleTitle"></p>
+													<p class="product-title" @click="toDetailPage(item2.f_MarketingId)" v-else v-text="item2.f_SaleTitle"></p>
+													<p class="productSku" v-text="sfLang.proSku + ': ' + item2.sku"></p>
+												</div>
+											</li>
+											<li>
+												<p>x{{item2.f_GoodsNum}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p>{{sfLang.sfheji}}</p>
+												<p>{{currencySign}}{{item.f_OriginalTotalPrice}}</p>
+											</li>
+											<li v-if="index2 == 0">
+												<p v-if="item.f_OrderState == 7" class="after-sale-p" v-text="sfLang.status7"></p>
+												<p v-if="item.f_OrderState == 8" class="after-sale-p" v-text="sfLang.status8"></p>
+												<p v-if="item.f_OrderState == 9" class="after-sale-p" v-text="sfLang.status9"></p>
+												<p v-if="item.f_OrderState == 10" class="after-sale-p" v-text="sfLang.status10"></p>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div style="clear: both;"></div>
+							<div class="notContent" v-show="notOrder">
+								<img src="./images/icon/orderIcon.png">
+								<p v-text="sfLang.notOrder"></p>
+							</div>
+							<div class="paging" v-show="pagerOrderVisible">
+								<el-pagination @current-change="changePage" :current-page.sync="page" background layout="prev, pager, next" :total="total">
+								</el-pagination>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 更改地址弹窗 -->
+				<el-dialog :title="sfLang.changeAdd" :visible.sync="dialogAddressVisible">
+					<el-form>
+						<el-form-item>
+							<el-radio-group v-model="changeAddressMsg.data.F_UsersAdressId">
+								<el-radio v-for="(item, index) in addressData" :key="index" :label="item.f_Id">
+									<span class="adr-name" v-text="item.f_ReceiveName"></span>
+									<span class="adr-tel" v-text="item.f_ReceiveTel"></span>
+									<span class="adr-content" v-text="item.f_ReceiveAddress"></span>
+									<span class="adr-default" v-if="item.f_IsDefalut == 1" v-text="sfLang.adrDefault"></span>
+								</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-form>
+					<div slot="footer" class="dialog-footer">
+						<el-button size="mini" @click="dialogAddressVisible = false">{{sfLang.quxiao}}</el-button>
+						<el-button size="mini" @click="changeAddress">{{sfLang.queding}}</el-button>
+					</div>
+				</el-dialog>
+				<!-- 申请退款弹窗 -->
+				<el-dialog :title="sfLang.refund" :visible.sync="dialogApplyVisible">
+					<el-form>
+						<el-form-item class="shenqing">
+							<el-row v-for="(item, index) in applyData" :key="index">
+								<el-col :span="4">
+									<img :src="item.f_GoodsImg" style="width: 80px; height: 80px;">
+								</el-col>
+								<el-col :span="20" class="apply-wraper">
+									<p class="apply-text ellipsis" v-text="item.f_SaleTitle"></p>
+									<p>
+										<span class="price">
+											<span v-text="sfLang.zongji +':'" class="color9"></span>
+											<span v-text="currencySign"></span><span v-text="item.f_SalePrice"></span>
+										</span>
+										<span class="num">
+											<span v-text="sfLang.proNum +':'"></span>
+											<span v-text="item.f_GoodsNum"></span>
+										</span>
+									</p>
+									<p class="pro-sku">
+										<span v-text="sfLang.proSku +':'"></span>
+										<span v-text="item.sku"></span>
+									</p>
+								</el-col>
+							</el-row>
+						</el-form-item>
+						<el-form-item :label="sfLang.tuikuanliyou">
+							<el-input type="textarea" :autosize="{ minRows: 2, maxRows: 5}" v-model="applyOrderMsg.data.F_RefundRemark"></el-input>
+						</el-form-item>
+					</el-form>
+					<div slot="footer" class="dialog-footer">
+						<el-button size="mini" @click="closeDialog">{{sfLang.quxiao}}</el-button>
+						<el-button size="mini" @click="applyHandle">{{sfLang.queding}}</el-button>
+					</div>
+				</el-dialog>
+				<!-- 付款 -->
+				<div class="mask" :class="{ on: dialogPayVisible }"></div>
+				<div class="layer-confirm" :class="{ on: dialogPayVisible }">
+					<div class="del-wrapper">
+						<div>
+							<i class="fontStyle" v-text="sfLang.sfheji"></i>: <i class="fontStyle sfcolor" v-text="currencySign"></i>
+							<i class="fontStyle sfcolor" v-text="orderMessage.f_OriginalTotalPrice"></i>
+							<span class="sffontsize">
+								(<i class="fontStyle" v-text="sfLang.include"></i>: <i class="fontStyle" v-text="currencySign"></i><i class="fontStyle" v-text="orderMessage.f_Fee"></i>)
+							 </span>
+						</div>
+						<div id="paypal-button" style="margin: 36px 0px;"></div>
+							<!-- <button type="button" @click="dialogPayVisible = false">132</button> -->
+						<span class="sfclose" @click="dialogPayVisible = false"><img src="./images/sfclose.png" alt=""></span>
+					</div>
+				</div>
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/orderList.js" type="text/javascript" charset="utf-8"></script>
+</html>

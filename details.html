@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/detailsStyle.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | รายละเอียดสินค้า</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<!--{if $WebSizeAdPlatform = a}-->
+		<!-- Facebook Pixel Code -->
+		<script>
+			!function (f, b, e, v, n, t, s) {
+				if (f.fbq) return; n = f.fbq = function () {
+						n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+				};
+				if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+				n.queue = []; t = b.createElement(e); t.async = !0;
+				t.src = v; s = b.getElementsByTagName(e)[0];
+				s.parentNode.insertBefore(t, s)
+			}(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+		</script>
+		<!-- End Facebook Pixel Code -->
+		<!--{/if}-->
+				
+		<!--{if $WebSizeAdPlatform = b}-->
+		<!-- tiktok Pixel Code -->
+		<script>
+			(function () {
+					var ta = document.createElement('script'); ta.type = 'text/javascript'; ta.async = true;
+					ta.src = document.location.protocol + '//' + 'static.bytedance.com/pixel/sdk.js?sdkid=[webSite.PixelId]';
+					var s = document.getElementsByTagName('script')[0];
+					s.parentNode.insertBefore(ta, s);
+			})();
+		</script>
+		<!-- End tiktok Pixel Code -->
+		<!--{/if}-->
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="detail" v-cloak v-loading="loading">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png" >
+					</div>
+				</el-backtop>
+				<section class="header-logo">
+					<div>
+						<div class="header-left">
+							<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+							<div @click="toIndexPage" class="hand">
+								<p>ELVENSHOP</p>
+								<p>Quick and convenient</p>
+							</div>
+						</div>
+						<div class="search">
+							<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+							<span></span>
+							<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+							<nav class="sfhot-words" v-show="sfhistory">
+								<ul class="sfhot-words-list">
+									<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+										<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+										<span v-text="sfLang.sfserhis"></span>
+									</li>
+								</ul>
+							</nav>
+						</div>
+				</section>
+
+				<article>
+					<!-- <h2>Home>All Categories>Autumn section explosions style casual</h2> -->
+					<h2 style="height: 40px;"></h2>
+					<section class="container">
+						<div class="container-left">
+							<div class="fenlei middle_img" @mouseover="boxMouseOver" @mouseleave="boxMouseLeave">
+								<!-- 商品主图 -->
+								<img :src="mainImgsUrl" alt="">
+								<!-- 阴影盒子 -->
+								<div class="shade" @mouseover="shadeMouseOver" @mousemove="shadeMouseMove" ref="shade" v-show="isShade">
+									<span>+</span>
+								</div>
+							</div>
+							<div class="caidan">
+								<!-- 商品缩略图 -->
+								<p>
+									<span v-for="(item, index) in rollImgs" @click="imgClick(index)" :class="{current: mainImgsUrl == item}">
+										<img :src="item+'?imageView/2/w/92/h/92'" width="92" height="92">
+									</span>
+								</p>
+							</div>
+							<div class="social-wraper flexbox middle center">
+								<div class="flex1 flexbox middle center" @click="collectHandle">
+									<img src="images/details/shoucang-bg.png" v-if="collectIndex == 0">
+									<img src="images/details/shoucang.png" v-if="collectIndex == 1">
+									<span v-text="sfLang.collect"></span>
+								</div>
+								<div class="flex1 flexbox middle center" @click="toServicePage">
+									<img src="images/details/kefu.png">
+									<span v-text="sfLang.kefu"></span>
+								</div>
+							</div>
+							<!-- 右边放大区域 -->
+							<div class="right_contanier" v-show="isBig">
+								<img :src="mainImgsUrl+'?imageView/2/w/1000/h/1000'" ref="bigImg" class="big_img" alt="">
+							</div>
+						</div>
+						<div class="container-right" id="container-right">
+							<p class="container-right-header" v-if="proData.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+proData.f_Title"></p>
+							<p class="container-right-header" v-else-if="proData.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+proData.f_Title"></p>
+							<p class="container-right-header" v-else v-text="proData.f_Title"></p>
+							<ul class="container-right-body">
+								<li>
+									<span class="sale-price">
+										<span v-text="currencySign"></span><span v-text="f_SalesPrice"></span>
+									</span>
+									<span class="origl-price">
+										<span v-text="currencySign"></span><span v-text="f_OriginalPrice"></span>
+									</span>
+									<span class="discount">
+										<span v-text="discount + '%off'"></span>
+									</span>
+								</li>
+								<li class="yueping">
+									<span v-text="sfLang.sales"></span><span class="yuexiao" v-text="proData.f_SaleNum"></span>
+									<span v-text="sfLang.commom"></span><span class="yuexiao" v-text="sfCommentNum"></span>
+								</li>
+								<li v-for="(item, n) in skuData" :key="n">
+									<p class="size-p">{{item.name}}</p>
+									<ul class="size color">
+										<li v-for="(item2, index) in item.list" :key="index" @click="selectSku(item2.sku, n, $event, index)" :class="[item2.isShow ? '' : 'noneActive', subIndex[n] == index ? 'active' : '']">
+											<span v-if="item2.imgUrl == ''">{{item2.sku}}</span>
+											<span v-else>
+												<el-tooltip :content="item2.sku" placement="top">
+													<img :src="item2.imgUrl+'?imageView/2/w/55/h/55'">
+												</el-tooltip>
+											</span>
+										</li>
+									</ul>
+								</li>
+								<li class="shuliang">
+									<span class="size-p" v-text="sfLang.quantity"></span>
+									<span class="num-num">
+										<span class="jian" v-if="addCartMsg.data.ShopCartDetail[0].F_Num == 1" style="color: #e8e8e8;">-</span>
+										<span class="jian" v-else @click="subtract">-</span>
+										<input class="num" type="text" v-model.number="addCartMsg.data.ShopCartDetail[0].F_Num" @change="handleNum($event)" />
+										<span class="jia" @click="increase">+</span>
+									</span>
+								</li>
+								<li v-if="proData.f_IsPublish == 1 && review != 1">
+									<span class="addcart" @click="addCart">
+										<i class="fontStyle" v-text="sfLang.addCart"></i>
+										<span></span>
+									</span>
+									<span class="buynow" @click="buyNow" v-text="sfLang.buyNow"></span>
+								</li>
+								<li v-else-if="review == 1" class="product-takeOff">
+									<div>
+										<span v-text="sfLang.sfNotOnline"></span>
+									</div>
+								</li>
+								<li v-else-if="proData.f_IsPublish == 0" class="product-takeOff">
+									<div>
+										<span v-text="sfLang.sftakeOff"></span>
+									</div>
+								</li>
+							</ul>
+						</div>
+<!-- 						<div class="container-right info-wraper" id="container-right">
+							<div class="info-title flexbox" v-if="proData.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+proData.f_Title"></div>
+							<div class="info-title flexbox" v-else-if="proData.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+proData.f_Title"></div>
+							<div class="info-title flexbox" v-else v-text="proData.f_Title"></div>
+							<div class="price-block flexbox middle">
+								<div>
+									<span class="sale-price">
+										<sub v-text="currencySign"></sub>{{f_SalesPrice}}
+									</span>
+									<span class="origl-price" v-text="f_OriginalPrice"></span>
+								</div>
+								<div class="installment flex1 flexbox right middle">
+									<span class="flexbox middle left">
+										{{sfLang.sales}}<b v-text="proData.f_SaleNum"></b>
+									</span>
+								</div>
+							</div>
+							<div class="property-wraper operation-property-wraper as-attr-skus">
+								<dl class="property-block flexbox middle left" v-for="(item, n) in skuData" :key="n" :data-skuidx="n">
+									<dt><span>{{item.name}}</span></dt>
+									<dd class="flexbox middle wrap">
+										<div class="property-radio" v-for="(item2, index) in item.list" :key="index" @click="selectSku(item2.sku, n, $event, index)" :class="[subIndex[n] == index ? 'on' : '']">
+											<label v-if="item2.imgUrl == ''">
+												<i :class="[subIndex[n] == index ? 'el-icon-check' : '']"></i>
+												{{item2.sku}}
+											</label>
+											<label class="property-radio-img" v-else>
+												<i :class="[subIndex[n] == index ? 'el-icon-check' : '']"></i>
+												<el-tooltip :content="item2.sku" placement="top">
+													<img :src="item2.imgUrl+'?imageView/2/w/55/h/55'">
+												</el-tooltip>
+											</label>
+										</div>
+									</dd>
+								</dl>
+								<dl class="property-block flexbox middle left">
+									<dt v-text="sfLang.quantity"></dt>
+									<dd class="property-amount-box">
+										<div class="property-amount flexbox middle justify">
+											<em class="minus el-icon-minus" :class="{disabled: addCartMsg.data.ShopCartDetail[0].F_Num == 1}" @click="subtract"></em>
+											<input class="flex1" type="text" v-model.number="addCartMsg.data.ShopCartDetail[0].F_Num" @change="handleNum($event)" />
+											<em class="plus el-icon-plus" @click="increase"></em>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<div class="btn-group flexbox middle">
+								<button type="button" class="button light-orange add-cart" v-text="sfLang.addCart" @click="addCart"></button>
+								<button type="button" class="button orange" v-text="sfLang.buyNow" @click="buyNow"></button>
+							</div>
+						</div> -->
+					</section>
+					
+					<div class="mainframe flexbox top detail-section">
+						<!-- 推荐 -->
+						<div class="p-block product-aside">
+							<dl class="store-wraper">
+								<dt v-text="sfLang.recommend"></dt>
+							</dl>
+							<dl class="samelike-wraper">
+								<dd>
+									<div class="tf-cat-item" v-for="(item, index) in hotData" :key="index" @click="toDetailPage(item.f_MarketingId)">
+										<div class="tf-p-warpper">
+											<div class="tf-p-img">
+												<img :src="item.f_MainImageUrl+'?imageView/2/w/202/h/202'">
+											</div>
+											<div class="tf-p-name">
+												<em  v-if="item.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item.f_Title"></em>
+												<em v-else-if="proData.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item.f_Title"></em>
+												<em v-else v-text="item.f_Title"></em>
+											</div>
+											<div class="tf-p-price flexbox justify middle">
+												<div class="flexbox flex1 vertical">
+													<strong class="promo-price">
+														<sub v-text="currencySign"></sub>{{item.f_SalesPrice}}
+													</strong>
+													<del class="price">
+														<sub v-text="currencySign"></sub>{{item.f_OriginalPrice}}
+													</del>
+												</div>
+												<div class="disscount">
+													{{sfLang.sales}}<span v-text="item.f_SaleNum"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
+						</div>
+						<!-- 商品详情 评论 -->
+						<div class="product-detail tab-frame flex1">
+							<div class="tab-menus flexbox middle left">
+								<li v-text="sfLang.proDetail" :class="{on: switchTab == 1 }" @click="switchHandel(1)"></li>
+								<li :class="{on: switchTab == 2 }" @click="switchHandel(2)">
+									<span v-text="sfLang.review"></span>
+									<span>({{sfCommentNum || 0}})</span>
+								</li>
+							</div>
+							<div class="tab-bodies">
+								<div class="tab-body" v-show="switchTab == 1">
+									<ul class="sp-xiangqing">
+										<li v-for="(item, index) in proData.desImgs" :key="index">
+											<img class="lazy" src="images/details/loading.gif" :data-src="item" alt="">
+											<!-- <img class="imgLen" :src="item"> -->
+											<!-- <el-image :src="item" lazy></el-image> -->
+										</li>
+									</ul>
+								</div>
+								<div class="tab-body" v-show="switchTab == 2">
+									<ul>
+										<li class="review-item" v-for="(item, index) in commentData" :key="index">
+											<div class="flexbox middle">
+												<div class="review-photo"></div>
+												<div class="review-name ellipsis">
+													<div v-text="item.f_CreateUser" class="ellipsis"></div>
+													<div class="review-stars flexbox middle">
+														<el-rate v-model="item.f_CommentStart" disabled :colors="sfrate"></el-rate>
+													</div>
+												</div>
+												<div class="review-time flex1 flexbox right" v-text="item.f_CreateDate"></div>
+											</div>
+											<div class="review-content">
+												<p v-text="item.f_CommentContent"></p>
+												<div class="review-pic flexbox left">
+													<div v-for="(item1, index1) in item.f_PicDetail" :key="index1" @click="sfchangeImg(index, index1)" :class="{active: reviewIndex == index1 && reviewArr == index}">
+														<img :src="item1+'?imageView/2/w/65/h/65'">
+													</div>
+												</div>
+												<div class="review-view" v-show="sfzhutu && reviewArr == index">
+													<el-carousel height="280px" :autoplay="false" :loop="false" indicator-position="none" ref="reviewCarousel" @change="sfchange">
+														<el-carousel-item v-for="(item2, index2) in item.f_PicDetail" :key="index2" style=" background: rgba(31,45,61,.05);">
+															<img :src="item2+'?imageView/2/w/280/h/280'" @click="hidezhutu()">
+														</el-carousel-item>
+													</el-carousel>
+												</div>
+												<div class="flexbox top justify">
+													<div class="review-attr flex1">
+														<span v-text="sfLang.sfsku+':'"></span>
+														<span v-text="item.f_AttributeValue"></span>
+														<span v-text="item.f_AttributeName"></span>
+													</div>
+													<div class="review-report"></div>
+												</div>
+											</div>
+										</li>
+									</ul>
+									<div class="paging">
+										<el-pagination @current-change="changePage" background layout="prev, pager, next" :total="total"
+										 :hide-on-single-page="pagerVisible">
+										</el-pagination>
+									</div>
+								</div>
+								<div class="notContent" v-if="notContent">
+									<img src="./images/icon/reviewIcon.png">
+									<p v-text="sfLang.notContent"></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/details.js" type="text/javascript" charset="utf-8"></script>
+</html>

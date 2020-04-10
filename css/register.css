@@ -1,0 +1,256 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	background: url(../images/register/bg.jpg) no-repeat center;
+	background-size: 1920px 100%;
+	background-position: center center;
+}
+
+/* .footer {
+	position: fixed;
+	bottom: 0;
+}
+
+.dibu {
+	position: fixed;
+	bottom: 40px;
+} */
+
+.header-nav-left li:nth-child(2) a{
+	color: #ff5230;
+}
+
+section {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: auto;
+	min-height: 831px;
+}
+
+.login {
+	float: right;
+	width: 35%;
+	margin-right: 5%;
+	margin-top: 80px;
+	margin-bottom: 60px;
+	background: white;
+	padding-bottom: 40px;
+	border: 1px solid #DCDCDC;
+	border-radius: 10px;
+	box-shadow: rgba(220,182,179,0.5) 1px 1px 20px;
+}
+
+.logo {
+	width: 80%;
+	height: 95px;
+	margin: 0 auto;
+	margin-top: 30px;
+}
+
+.logo div {
+	width: 17%;
+	position: relative;
+	margin-left: 19%;
+}
+
+.logo div p {
+	color: #333333;
+	width: 180px;
+	height: 40px;
+	overflow: hidden;
+	position: absolute;
+	top: 13px;
+	left: 97px;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+img {
+	width: 100%;
+}
+
+.login form {
+	width: 100%;
+	position: relative;
+}
+
+.login form input {
+	margin: 0 10%;
+	width: 80%;
+	height: 40px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+	cursor: pointer;
+}
+
+.login form p {
+	overflow: hidden;
+	height: 30px;
+	display: block;
+	color: #ff5230;
+	font-size: 12px;
+	margin-left: 35px;
+	line-height: 25px;
+	width: 80%;
+	margin: 0 auto;
+	text-align: left;
+}
+
+.login form p span {
+	height: 16px;
+	width: 16px;
+	background: #ff5230;
+	border-radius: 100%;
+	float: left;
+	margin-left: 0;
+	margin-right: 5px;
+	margin-top: 5px;
+	color: white;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: center;
+}
+
+.user-bg {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 6px;
+	left: 13%;
+}
+
+.email-bg {
+	width: 20px;
+	height: 16px;
+	position: absolute;
+	top: 82px;
+	left: 13%;
+}
+
+.pwd-bg {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 150px;
+	left: 13%;
+}
+
+.pwd1-bg {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 222px;
+	left: 13%;
+}
+
+.username {
+	text-indent: 50px;
+}
+
+.name {
+	text-indent: 50px;
+}
+
+.pwd {
+	text-indent: 50px;
+}
+
+.pwd-1 {
+	text-indent: 50px;
+}
+
+.zhuce {
+	text-align: right!important;
+	
+}
+
+.zhuce a {
+	color: #ff5230;
+	text-decoration: none;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.radio {
+	float: left;
+	margin-left: 10%;
+	background: url(../images/register/duihao.png) no-repeat center;
+	background-size: 100%;
+	width: 20px;
+	height: 20px;
+}
+
+.xieyi {
+	display: inline-block;
+	text-indent: 10px;
+	line-height: 20px;
+	font-size: 12px;
+	overflow: hidden;
+	cursor: pointer;
+/* 	text-overflow: ellipsis;
+	white-space: pre; */
+}
+.xieyi:hover{
+	color: #ff5230;
+}
+
+.yzm {
+	background: url(../images/login/yzbg.jpg) no-repeat;
+	color: white;
+	padding: 10px 20px;
+	font-size: 1.2em;
+	letter-spacing: 4px;
+	border-radius: 10px;
+}
+
+.yzNum {
+	text-indent: 30px;
+	width: 20%!important;
+	margin-right: 5%!important;
+}
+
+.huanyihuan {
+    cursor: pointer;
+    font-size: 14px;
+    color: #949494;
+    margin-left: 10px;
+    padding-top: 10px;
+    float: right;
+    width: 150px;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre;
+}
+.huanyihuan:hover{
+	color: #ff5230;
+}
+
+.sub {
+	background: url(../images/login/sub_bg.png) no-repeat center;
+	background-size: 100%;
+	width: 80%;
+	height: 40px;
+	display: block;
+	margin: 0 auto;
+	border-radius: 2rem;
+	text-align: center;
+	line-height: 40px;
+	color: white;
+	margin-top: 10px;
+	cursor: pointer;
+	position: relative;
+	transition: all .2s;
+}
+
+.sub:hover {
+	box-shadow: rgba(0, 0, 0, .2) 0 3px 5px;
+	bottom: 1px;
+}

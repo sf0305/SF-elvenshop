@@ -1,0 +1,212 @@
+*{
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	color: black;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+	background: white;
+}
+/* .dibu{
+	position: fixed;
+	bottom: 40px;
+}
+.footer{
+	position: fixed;
+	bottom: 0;
+} */
+.Top{
+	width: 100%;
+	background: white;
+	box-shadow: 1px 1px 5px #DCDCDC;
+}
+.Top>div{
+	width: 1200px;
+	height: 80px;
+	margin: 0 auto;
+}
+.Top li{
+	height: 80px;
+	text-align: center;
+	line-height: 80px;
+}
+.Top li:hover{
+	color: #ff5230;
+}
+.logo{
+	float: left;
+	margin-top: 15px;
+}
+.logo-text{
+	float: left;
+	margin-left: 25px;
+	font-size: 24px;
+	font-weight: bold;
+}
+.zhuce{
+	float: right;
+}
+#denglu{
+	margin: 0 20px;
+	width: 80px;
+	height: 15px;
+	margin-top: 32.5px;
+	border-left: 1px solid #949494;
+	border-right: 1px solid #949494;
+	float: right;
+	line-height: 15px;
+}
+.shop{
+	float: right;
+}
+section{
+	width: 1200px;
+	margin: 0 auto;
+	height: 500px;
+	margin-top: 100px;
+	margin-bottom: 231px;
+}
+.yanzheng{
+	width: 65%;
+	height: 65px;
+	margin: 0 auto;
+	background: url(../images/retrieve/yz-bg.png) no-repeat center;
+	background-size: 100%;
+}
+.yanzheng img{
+	width: 100%;
+	margin-top: 50px;
+}
+.ret-1{
+	float: left;
+	line-height: 65px;
+	margin-left: 15%;
+	color: #ff5230;
+}
+.ret-2{
+	float: right;
+	line-height: 65px;
+	margin-right: 15%;
+	color: white;
+}
+.shezhi{
+	width: 65%;
+	height: 50px;
+	margin: 0 auto;
+}
+.shezhi img{
+	width: 100%;
+	margin-top: 50px;
+}
+form{
+	position: relative;
+	width: 65%;
+	height: 240px;
+	margin: 0 auto;
+	margin-top: 120px;
+}
+form input{
+	margin: 5px 20%;
+	width: 60%;
+	height: 50px;
+	cursor: pointer;
+}
+.pwd{
+	text-indent: 50px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+}
+.pwd-1{
+	text-indent: 50px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+}
+.pwd-bg{
+	display: block;
+	position: absolute;
+	width: 23px;
+	height: 25px;
+    top: 16px;
+	left: 21%;
+}
+.pwd1-bg{
+	display: block;
+	position: absolute;
+	height: 25px;
+	top: 77px;
+	left: 21%;
+}
+#pwdText {
+    position: absolute;
+    height: 30px;
+    display: block;
+    color: #ff5230;
+    font-size: 12px;
+    margin-left: 35px;
+    line-height: 25px;
+    width: 420px;
+    text-align: left;
+    right: -200px;
+    top: 20px;
+}
+#pwd1Text {
+    position: absolute;
+    height: 30px;
+    display: block;
+    color: #ff5230;
+    font-size: 12px;
+    margin-left: 35px;
+    line-height: 25px;
+    width: 420px;
+    text-align: left;
+    right: -200px;
+    top: 80px;
+}
+#pwdText>span {
+    height: 16px;
+    width: 16px;
+    background: #ff5230;
+    border-radius: 100%;
+    float: left;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-top: 5px;
+    color: white;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+}
+#pwd1Text>span {
+    height: 16px;
+    width: 16px;
+    background: #ff5230;
+    border-radius: 100%;
+    float: left;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-top: 5px;
+    color: white;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.sub{
+	display: block;
+	width: 60%;
+	height: 50px;
+	margin: 0 auto;
+	border-radius: 100px;
+	background: url(../images/retrieve/sub.png) no-repeat center;
+	background-size: 100% 100%;
+	margin-top: 50px;
+	color: white;
+	font-size: 16px;
+	text-align: center;
+	line-height: 50px;
+	cursor: pointer;
+}

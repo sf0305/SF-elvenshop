@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/indexStyle.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | โฮมเพจ</title>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<article id="itany">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div style="background: white;padding-top: 10px;">
+					<section class="section-header" v-if="domainNameVisible == 0">
+						<div class="section-header-logo">
+							<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+							<p>Elvenshop.com</p>
+						</div>
+						<div class="section-header-search">
+							<div class="shop-searchbar">
+								<input type="text" v-model="searchContent" @keyup.enter.exact="searchBtn" @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch" :placeholder="sfLang.searchContent" maxlength="128"/>
+								<span @click="searchBtn" v-text="sfLang.search"></span>
+								<p class="sfsearch"></p>
+							</div>
+							<nav class="hot-words" v-show="sfhistory">
+								<ul class="hot-words-list">
+									<li class="hot-words-item" v-for="(item, index) in searchItem" :key="index">
+										<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+										<span v-text="sfLang.sfserhis"></span>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<div class="section-header-qRcode">
+							<div id="qrcode"></div>
+						</div>
+					</section>
+					<section class="section-header" v-else-if="domainNameVisible == 1">
+						<div class="mainframe topbody flexbox top left">
+							<div class="logonav">
+								<a class="logo0" title="burstingmall.com"></a>
+							</div>
+							<div class="search-box">
+								<div class="search-wrapper flexbox top left">
+									<div class="search-input flex1">
+										<input type="text" maxlength="256" autocomplete="off" v-model="searchContent" @keyup.enter.exact="searchBtn" @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch" :placeholder="sfLang.searchContent" />
+									</div>
+									<div class="search-btn" v-text="sfLang.search" @click="searchBtn"></div>
+								</div>
+							</div>
+							<div class="shopcart-box"></div>
+						</div>
+					</section>
+				</div>
+				<section class="section-body">
+					<div class="section-body-header">
+						<div class="section-body-header-right" v-text="sfLang.theme"></div>
+						<div class="section-body-header-left"></div>
+					</div>
+					<div class="section-body-container">
+						<div class="section-body-container-page">
+							<ul class="container-page"></ul>
+							<div class="page-hover">
+								<nav class="page-hover-l"></nav>
+							</div>
+						</div>
+						<div class="section-body-container-wheel" @mousemove="imgStop" @mouseout="imgStart">
+							<div class="banner-wheel">
+								<ul class="banner-wheel-run"></ul>
+							</div>
+							<span class="about" id="left" @click="nextImg">&lt;</span>
+							<span class="about" id="right" @click="prevImg">&gt;</span>
+						</div>
+					</div>
+				</section>
+				<section class="commodity" v-show="hotVisible">
+					<p class="commodity-p"><span>|</span><span v-text="sfLang.hot"></span></p>
+					<div class="commodity-container">
+						<ul class="commodity-container-run">
+							<li v-for="(item, index) in getDetailData" :key="index" :data-f_id=item.f_MarketingId @click="detailHandle(item.f_MarketingId)">
+								<a>
+									<img :src="item.f_MainImageUrl+'?imageView/2/w/257/h/257'" alt="">
+								</a>
+								<p v-if="item.f_MarketingType == 0" v-text="item.f_Title"></p>
+								<p v-if="item.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item.f_Title"></p>
+								<p v-if="item.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item.f_Title"></p>
+								<span class="commodity-money">{{currencySign}}{{item.f_SalesPrice}}</span>
+								<span class="commodity-payment"><span v-text="sfLang.sales"></span> {{item.f_SaleNum}}</span>
+								<span class="commodity-price">{{currencySign}}{{item.f_OriginalPrice}}</span>
+							</li>
+						</ul>
+						<div style="clear: both;"></div>
+						<span id="nextCommodity">&gt;</span>
+						<span id="prevCommodity">&lt;</span>
+
+					</div>
+
+				</section>
+				<section class="commodity-list">
+					<div v-for="(item, index) in categoryData" :key="index">
+						<p><span>|</span>{{ item.f_LanguageName }}</p>
+						<div class="commodity-list-bigimg">
+							<!-- <el-image  @click="toPage(1, item.f_Id)" :src="item.f_CategoryWebPicUrl" lazy></el-image> -->
+							<img :src="item.f_CategoryWebPicUrl+'?imageView/2/w/576/h/288'" @click="toPage(1, item.f_Id)" onerror="this.src='./images/details/loading.gif'">
+						</div>
+						<div class="commodity-list-img">
+							<img v-for="(item2, index2) in item.subCategory" v-if="index2 < 2" :src="item2.f_CategoryWebPicUrl+'?imageView/2/w/280/h/140'" @click="toPage(2, item2.f_Id)"
+							 :key="index2" onerror="this.src='./images/details/loading.gif'">
+						</div>
+					</div>
+				</section>
+				<!-- 商品推荐 -->
+				<div class="recommend-booth mainframe">
+					<div class="top-title flexbox middle center">
+						<em v-text="sfLang.recommend"></em>
+					</div>
+					<div class="list-box" v-loading="loading">
+						<ul class="home-rec-body flexbox top left wrap">
+							<li class="tf-rec-item" v-for="(item,index) in recommendData" :key="index" @click="detailHandle(item.f_MarketingId)">
+								<div class="tf-p-warpper">
+									<div class="tf-p-border"></div>
+									<div class="tf-p-img">
+										<i><img :src="item.f_MainImageUrl+'?imageView/2/w/206/h/206'"></i>
+										<div class="sold-out hide">SOLD OUT</div>
+									</div>
+									<div class="tf-p-name">
+										<em v-if="item.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item.f_Title"></em>
+										<em v-else-if="item.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item.f_Title"></em>
+										<em v-else v-text="item.f_Title"></em>
+									</div>
+									<div class="tf-p-price flexbox justify middle">
+										<div class="flexbox flex1 vertical">
+											<strong class="promo-price" v-text="currencySign+''+item.f_SalesPrice"></strong>
+											<del class="price" v-text="currencySign+''+item.f_OriginalPrice"></del>
+										</div>
+										<div class="nums">
+											<span v-text="sfLang.sales"></span><span v-text="item.f_SaleNum"></span>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="home-rec-footer flexbox middle center">
+							<div class="notContent" v-if="recommendData.length == 0">
+								<img src="images/shopping/empty.png">
+								<p v-text="sfLang.none"></p>
+							</div>
+							<div class="home-rec-more" @click="handelMore" v-show="hideMore">
+								<span v-text="sfLang.more"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</article>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+			<h1 class="sfh1"></h1>
+			<h2 class="sfh2">
+				<div>
+					<p>Your current browser does not support it at this time, please use another browser or upgrade</p>
+					<p>您当前浏览器暂不支持，请使用其它浏览器或升级</p>
+				</div>
+			</h2>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//getElementsByClassName兼容低版本IE方法
+		if (!document.getElementsByClassName) {
+			document.getElementsByClassName = function(className, element) {
+				var children = (element || document).getElementsByTagName('*');
+				var elements = new Array();
+				for (var i = 0; i < children.length; i++) {
+					var child = children[i];
+					var classNames = child.className.split(' ');
+					for (var j = 0; j < classNames.length; j++) {
+						if (classNames[j] == className) {
+							elements.push(child);
+							break;
+						}
+					}
+				}
+				return elements;
+			};
+		}
+		
+		var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+		var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
+		var isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent); //判断是否Safari浏览器
+		// var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+		// var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1; //判断是否IE11浏览器  
+		if (isIE) {
+			console.log('小于IE11的浏览器')
+			var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+			reIE.test(userAgent);
+			var fIEVersion = parseFloat(RegExp["$1"]);
+		
+			document.getElementsByClassName('sfh1')[0].style.display = 'block';
+			document.getElementsByClassName('sfh2')[0].style.display = 'block';
+		} else if (isSafari) {
+		
+			document.getElementsByClassName('sfh1')[0].style.display = 'block';
+			document.getElementsByClassName('sfh2')[0].style.display = 'block';
+		}
+	</script>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+</html>

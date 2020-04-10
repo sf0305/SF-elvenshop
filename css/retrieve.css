@@ -1,0 +1,207 @@
+*{
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	color: #333333;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+	background: white;
+}
+/* .footer{
+	position: fixed;
+	bottom: 0;
+}
+.dibu{
+	position: fixed;
+	bottom: 40px;
+} */
+.Top{
+	width: 100%;
+	background: white;
+	box-shadow: 1px 1px 5px #DCDCDC;
+}
+.Top>div{
+	width: 1200px;
+	height: 80px;
+	margin: 0 auto;
+}
+.Top li{
+	height: 80px;
+	text-align: center;
+	line-height: 80px;
+}
+.Top li:hover{
+	color: #ff5230;
+}
+.logo{
+	float: left;
+	margin-top: 15px;
+}
+.logo-text{
+	float: left;
+	margin-left: 25px;
+	font-size: 24px;
+	font-weight: bold;
+}
+.zhuce{
+	float: right;
+}
+#denglu{
+	margin: 0 20px;
+	width: 80px;
+	height: 15px;
+	margin-top: 32.5px;
+	border-left: 1px solid #949494;
+	border-right: 1px solid #949494;
+	float: right;
+	line-height: 15px;
+}
+.shop{
+	float: right;
+}
+section{
+	width: 1200px;
+	margin: 0 auto;
+	height: 500px;
+	margin-top: 100px;
+	margin-bottom: 231px;
+}
+.yanzheng{
+	width: 65%;
+	height: 65px;
+	margin: 0 auto;
+	background: url(../images/retrieve/yanzheng-bg.png) no-repeat center;
+	background-size: 100%;
+}
+.yanzheng img{
+	width: 100%;
+	margin-top: 50px;
+}
+.ret-1{
+	float: left;
+	line-height: 65px;
+	margin-left: 15%;
+	color: white;
+}
+.ret-2{
+	float: right;
+	line-height: 65px;
+	margin-right: 15%;
+	color: #ff5230;
+}
+.shezhi{
+	width: 65%;
+	height: 50px;
+	margin: 0 auto;
+}
+.shezhi img{
+	width: 100%;
+	margin-top: 50px;
+}
+form{
+	position: relative;
+	width: 65%;
+	height: 240px;
+	margin: 0 auto;
+	margin-top: 120px;
+}
+form>input{
+	margin: 5px 20%;
+	width: 60%;
+	height: 50px;
+	cursor: pointer;
+}
+.name{
+	text-indent: 50px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+}
+.pwd{
+	text-indent: 50px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #e8e8e8;
+}
+.name-bg{
+	display: block;
+	position: absolute;
+	width: 30px;
+	top: 18px;
+	left: 21%;
+}
+#emailText{
+	position: absolute;
+	height: 30px;
+	display: block;
+	color: #ff5230;
+	font-size: 12px;
+	margin-left: 35px;
+	line-height: 25px;
+	text-align: left;
+	right: 20%;
+	top: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+#emailText span{
+	height: 16px;
+	width: 16px;
+	background: #ff5230;
+	border-radius: 100%;
+	float: left;
+	margin-left: 0;
+	margin-right: 5px;
+	margin-top: 5px;
+	color: white;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: center;
+}
+.pwd-bg{
+	display: block;
+	position: absolute;
+	width: 23px;
+    height: 35px;
+	top: 72px;
+	left: 21%;
+}
+.send{
+	width: 90px;
+	height: 30px;
+	position: absolute;
+	top: 78px;
+	right: 21%;
+	text-align: center;
+	line-height: 30px;
+	border-radius: 5px;
+	border: 1px solid rgb(255,124,96);
+	color: #ff5230;
+	background: rgb(255,226,220);
+}
+.send input{
+	width: 100%;
+	height: 100%;
+	background: none;
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+.sub{
+	display: block;
+	width: 60%;
+	height: 50px;
+	margin: 0 auto;
+	border-radius: 100px;
+	background: url(../images/retrieve/sub.png) no-repeat center;
+	background-size: 100% 100%;
+	margin-top: 50px;
+	color: white;
+	font-size: 16px;
+	text-align: center;
+	line-height: 50px;
+	cursor: pointer;
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="Keywords" content=""/>
+	<meta name="Description" content=""/>
+	<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+	<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+	<link rel="stylesheet" type="text/css" href="css/base.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/cart.css"/>
+	<link rel="shortcut icon" href="images/logo.png" />
+	<title>ElvenShop | รถเข็น</title>
+	<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<div class="backTop">
+	<header class="header" id="header">
+		<header-nav></header-nav>
+	</header>
+	<div id="cart" v-cloak>
+		<el-backtop target=".backTop" :right="100">
+			<div>
+				<img src="./images/index/top-bg.png">
+			</div>
+		</el-backtop>
+		<section class="header-logo">
+			<div>
+				<div class="header-left">
+					<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+					<div @click="toIndexPage" class="hand">
+						<p>ELVENSHOP</p>
+						<p>Quick and convenient</p>
+					</div>
+				</div>
+				<div class="search">
+					<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+					<span></span>
+					<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+					<nav class="sfhot-words" v-show="sfhistory">
+						<ul class="sfhot-words-list">
+							<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+								<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+								<span v-text="sfLang.sfserhis"></span>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</section>
+		
+		<div class="notContent" v-if="searchFlag">
+			<img src="images/shopping/empty.png">
+			<p v-text="sfLang.none"></p>
+		</div>
+		<div class="container" v-else>
+			<div class="cart-page-content">
+				<div class="cart-page-product-header">
+					<!-- <div class="cart-item__cell-checkbox">
+						<span class="stardust-checkbox" @click="select(index)">
+							<img src="images/duihao.png" alt="">
+						</span>
+					</div> -->
+					<div class="header-product" v-text="sfLang.product"></div>
+					<div class="header-price" v-text="sfLang.Amount"></div>
+					<div class="header-quantity" v-text="sfLang.Quantity"></div>
+					<div class="header-total-price" v-text="sfLang.totalPrice"></div>
+					<div class="header-action" v-text="sfLang.Operating"></div>
+				</div>
+				<div>
+					<div class="cart-page-shop-section" v-for="(item, index) in cartShelvesData" :key="index">
+						<div class="cart-page-shop-section-items">
+							<div class="cart-item" v-for="(item2, index2) in item.arr" :key="index2">
+								<div class="cart-item-content">
+									<div class="cart-item-checkbox">
+										<span class="check-img" :class="{ checked: item2.select }" @click="selectedProduct(item2, index, index2)">
+											<img src="images/duihao.png" alt="">
+										</span>
+									</div>
+									<div class="cart-item-overview">
+										<div class="thumb">
+											<img :src="item2.attributeImg+'?imageView/2/w/80/h/80'" style="width: 80px; height: 80px;" @click="toDetail(item2.f_MarketingId)">
+										</div>
+										<div class="product-name" v-if="item2.f_MarketingType == 0" v-text="item2.f_Title" @click="toDetail(item2.f_MarketingId)"></div>
+										<div class="product-name" v-if="item2.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item2.f_Title" @click="toDetail(item2.f_MarketingId)"></div>
+										<div class="product-name" v-if="item2.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item2.f_Title" @click="toDetail(item2.f_MarketingId)"></div>
+									</div>
+									<div class="cart-item-variation">
+										<span v-text="item2.sku"></span>
+									</div>
+									<div class="cart-item-price">
+										<div>
+											<span v-text="currencySign"></span><span v-text="item2.f_SalesPrice"></span>
+										</div>
+									</div>
+									<div class="cart-item-quantity">
+										<div class="shop-input-quatity">
+											<button class="minus _1zT8xu" v-if="item.f_Num == 1" style="color: #e8e8e8;">-</button>
+											<button class="minus _1zT8xu" v-else @click="minus(item2, index, index2)">-</button>
+											<input class="quatity _1zT8xu" type="text" v-model="item2.f_Num"  @change="handleNum($event, index, index2)"/>
+											<button class="plus _1zT8xu" @click="plus(item2, index, index2)">+</button>
+										</div>
+									</div>
+									<div class="cart-item-total-price">
+										<span v-text="currencySign + '' + item2.f_TotalPrice"></span>
+									</div>
+									<div class="cart-item-action">
+										<span @click="delHandle(item2)"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 已下架商品 -->
+					<div class="cart-page-shop-section" v-if="requiredCartData.length != 0">
+						<div class="cart-page-shop-section-items">
+							<div class="cart-item" v-for="(item, index) in requiredCartData" :key="index">
+								<div class="cart-item-content">
+									<div class="cart-item-checkbox off">
+										<span v-text="sfLang.off"></span>
+									</div>
+									<div class="cart-item-overview" @click="toDetail(item.f_MarketingId)">
+										<div class="thumb">
+											<img :src="item.attributeImg" style="width: 80px; height: 80px;">
+										</div>
+										<div class="product-name off" v-text="item.f_Title"></div>
+									</div>
+									<div class="cart-item-variation off">
+										<span v-text="item.sku"></span>
+									</div>
+									<div class="cart-item-price off">
+										<div>
+											<span v-text="currencySign"></span><span v-text="item.f_SalesPrice"></span>
+										</div>
+									</div>
+									<div class="cart-item-quantity off">
+										<div class="shop-input-quatity">
+											<span v-text="item.f_Num"></span>
+										</div>
+									</div>
+									<div class="cart-item-total-price off">
+										<span v-text="currencySign + '' + item.f_TotalPrice"></span>
+									</div>
+									<div class="cart-item-action">
+										<span @click="delHandle(item)"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="paging">
+						<el-pagination 
+						  @current-change="changePage"
+						  background
+						  layout="prev, pager, next"
+						  :total="total"
+							:hide-on-single-page="pagerVisible">
+						</el-pagination>
+					</div>
+				</div>
+			</div>
+			<div class="cart-page-footer cart-page-overlap">
+				<div class="cart-page-footer-row">
+					<div class="cart-item-checkbox checkbox-wrapper">
+						<div class="check-img" @click="checkAll(checkAllFlag)" :class="{checkAll: checkAllFlag}">
+							<img src="./images/duihao.png" alt="">
+						</div>
+					</div>
+					<button class="cart-page-footer-product-count clear-btn-style" @click="checkAll(checkAllFlag)" v-text="sfLang.quanxuan"></button>
+					<div class="cart-page-footer-remove-inactive" v-text="sfLang.remove" @click="remove"></div>
+					<div class="cart-page-footer-gap"></div>
+					<div class="cart-page-footer-summary">
+						<div class="cart-page-footer-first-summary">
+							<div class="cart-page-footer-summary-subtotal">
+								<div class="cart-page-footer-summary-subtotal-text" v-text="sfLang.total+':'"></div>
+								<div class="cart-page-footer-summary-subtotal-amount">
+									<span v-text="currencySign"></span>{{totalMoney}}
+								</div>
+							</div>
+						</div>
+						<div class="cart-page-footer-second-summary"></div>
+					</div>
+					<div class="cart-page-footer-checkout" @click="toPage">
+						<button class="shop-button-solid shop-button-solid-primary">
+							<span class="cart-page-footer-checkout-text" v-text="sfLang.settlement"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="help" id="help">
+	  <help-nav></help-nav>
+	 </div>
+	<div id="dibu" class="dibu"></div>
+	<footer class="footer" id="footer"></footer>
+	<!-- <footer class="footer" id="footer"></footer> -->
+	</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/cart.js" type="text/javascript" charset="utf-8"></script>
+</html>

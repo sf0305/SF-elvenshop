@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/login.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | ลงชื่อเข้าใช้งาน</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+
+			<section id="itany">
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div class="login">
+					<div class="logo">
+						<img src="images/index/logo.png" alt="">
+					</div>
+					<form action="" @keyup.enter.exact="send">
+						<input onblur="emailVction()" onfocus="emailFocus()" class="name" v-model="userMsg.data.F_UserName" type="text"
+						 value="" :placeholder="sfLang.mailuser"/>
+						<img class="name-bg" src="images/login/name_bg.png" alt="">
+						<p id="emailText"></p>
+						<input onblur="pwdVction()" onfocus="pwdFocus()" v-model="userMsg.data.F_PassWord" class="pwd" type="password"
+						 value="" :placeholder="sfLang.password" maxlength="20"/>
+						<img class="pwd-bg" src="images/login/pwd_bg.png" alt="">
+						<p id="pwdText"></p>
+						<i class="sfblock" style="font-style: normal;display: none;">
+						  <input onblur="yzRandomNum()" onfocus="yzmFocus()" class="yzNum" type="text" name="points" maxlength="4" :placeholder="sfLang.sfcode"/>
+						  <span class="yzm"></span>
+						  <span onclick="randomNum()" class="huanyihuan" v-text="sfLang.huanyihuan"></span>
+						  <br>
+						  <p class="yzok"></p >
+						</i>
+<!-- 						<input onblur="yzRandomNum()" onfocus="yzmFocus()" class="yzNum" type="text" name="points" maxlength="4" :placeholder="sfLang.sfcode"/>
+						<span class="yzm"></span>
+						<span onclick="randomNum()" class="huanyihuan" v-text="sfLang.huanyihuan"></span>
+						<br>
+						<p class="yzok"></p> -->
+						<span @click="send" class="sub" v-text="sfLang.login"></span>
+					</form>
+					<div class="forget">
+						<p class="wangji"><a href="retrieve.html" v-text="sfLang.forget + '?'"></a></p>
+						<p class="zhuce"><a href="register.html" v-text="sfLang.regnew"></a></p>
+					</div>
+					<fieldset class="snslinks">
+						<legend>Login with</legend>
+						<div class="snslinks-box">
+							<div class="snslink-item flexbox middle center line" @click="lineLogin">
+								<i class="ico-snslink"></i>
+								<span>Line</span>
+							</div>
+							<div class="snslink-item flexbox middle center facebook" @click="facebookLogin">
+								<i class="ico-snslink"></i>
+								<span>Facebook</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</section>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/login.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+</html>

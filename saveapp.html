@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<!-- <link rel="stylesheet" type="text/css" href="./css/element-ui.css"/> -->
+		<!-- <link rel="stylesheet" type="text/css" href="css/base.css" /> -->
+		<link rel="stylesheet" type="text/css" href="css/saveapp.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>ElvenShop | ดาวน์โหลด</title>
+	</head>
+	<body>
+			<div id="app" v-cloak>
+				<div class="saveapp-top flexbox">
+					<a href="./index.html"><img src="./images/logo.png" alt=""></a>
+					<p v-text="sfLang.download"></p>
+				</div>
+				<div class="saveapp">
+					<div class="saveapp-left">
+						<h1 v-text="sfLang.huanying +' Elvenshop'"></h1>
+						<h2 v-text="sfLang.gouwupingtai"></h2>
+						<h3 v-text="sfLang.huoqu + '!'"></h3>
+						<div>
+							<!-- <img src="images/saveapp/appleStore.png" alt=""> -->
+							<!-- <img src="images/saveapp/googlePlay.png" alt=""> -->
+						</div>
+						<nav>
+							<div id="saveqrcode"></div>
+							<img src="./images/icon/LogoQrcode.png" alt="">
+							<p class="version" v-text="sfLang.anzhuo"></p>
+						</nav>
+					</div>
+					<div class="saveapp-right">
+						<img src="images/saveapp/saveapp-yangji.png" >
+					</div>
+				</div>
+				<div class="saveapp-bottom">
+					<h1 v-text="sfLang.suishi"></h1>
+					<h2 v-text="sfLang.yongyou"></h2>
+					<ul>
+						<li>
+							<img src="./images/saveapp/wuliu.png" alt="">
+							<h3 v-text="sfLang.wuliu"></h3>
+							<h4 v-text="sfLang.wuliumsg"></h4>
+						</li>
+						<li>
+							<img src="./images/saveapp/kefu.png" alt="">
+							<h3 v-text="sfLang.kehu"></h3>
+							<h4 v-text="sfLang.kehumsg"></h4>
+						</li>
+						<li>
+							<img src="./images/saveapp/tuijian.png" alt="">
+							<h3 v-text="sfLang.tuijian"></h3>
+							<h4 v-text="sfLang.tuijianmsg"></h4>
+						</li>
+						<li>
+							<img src="./images/saveapp/fukuan.png" alt="">
+							<h3 v-text="sfLang.fukuan"></h3>
+							<h4 v-text="sfLang.fukuanmsg"></h4>
+						</li>
+						<li>
+							<img src="./images/saveapp/liaotian.png" alt="">
+							<h3 v-text="sfLang.liaotian"></h3>
+							<h4 v-text="'Elvenshop'+sfLang.liaotianmsg"></h4>
+						</li>
+						<li>
+							<img src="./images/saveapp/anquan.png" alt="">
+							<h3 v-text="'Elvenshop '+sfLang.baozheng"></h3>
+							<h4 v-text="'Elvenshop '+sfLang.baozhengmsg"></h4>
+						</li>
+					</ul>
+				</div>
+				<div class="dibu">
+					<img src="images/dibu-bg.png" alt=""/>
+				</div>
+			</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<!-- <script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script> -->
+	<!-- <script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script> -->
+	<script src="js/saveapp.js" type="text/javascript" charset="utf-8"></script>
+</html>

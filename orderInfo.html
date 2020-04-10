@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="./css/orderInfo.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | รายละเอียดการสั่งซื้อ</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="orderDetail" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<div class="order-title">
+					<div>
+						<p v-text="sfLang.orderDetail"></p>
+					</div>
+				</div>
+				<div class="xiangqing">
+					<div class="xiangqing-body">
+						<div class="orderInfo-title flexbox">
+							<div class="label flexbox" v-text="sfLang.orderInfo"></div>
+							<div class="service-box flexbox middle right flex1" @click="toServicePage(orderDetailData.f_OrderNo)">
+								<img src="./images/details/kefu.png" alt="">
+								<span v-text="sfLang.service"></span>
+							</div>
+						</div>
+						<ul class="dingdan" id="dingdan">
+							<li>
+								<span>
+									{{ sfLang.OrderNo }}: {{orderDetailData.f_OrderNo}}
+								</span>
+							</li>
+							<li>
+								<span>
+									{{ sfLang.OrderCreateTime }}: {{orderDetailData.f_OrderCreateTime}}
+								</span>
+							</li>
+							<li>
+								<span v-if="orderDetailData.f_PayType == 0">
+									{{ sfLang.paypal+': paypal' }}
+								</span>
+								<span v-if="orderDetailData.f_PayType == 1">
+									{{ sfLang.paypal }}: {{ sfLang.daofu }}
+								</span>
+								<span v-if="orderDetailData.f_PayType == 2">
+									{{ sfLang.paypal+': paypal' }}
+								</span>
+							</li>
+							<li>
+								<span>
+									{{ sfLang.deliveryTime }}: {{orderDetailData.f_SignedDate}}
+								</span>
+							</li>
+							<li>
+								<span v-if="orderDetailData.f_PayType == 2">
+									{{ sfLang.zhifuTime }}: {{orderDetailData.f_PayTime}}
+								</span>
+								<span v-else>
+									{{ sfLang.zhifuTime }}: {{orderDetailData.f_SignedDate}}
+								</span>
+							</li>
+							<li id="dingdanli">
+								<span>
+									{{ sfLang.liuyan }}: {{ orderDetailData.f_Remark }}
+								</span>
+							</li>
+						</ul>
+						<div class="orderInfo-title">
+							<div class="label" v-text="sfLang.LogisticsMsg"></div>
+						</div>
+						<ul class="dingdan">
+							<li style="width: 100%;">
+								<span>
+									{{ sfLang.zhuangtai }}: {{logzhuangtai}}
+								</span>
+							</li>
+						</ul>
+						<div class="orderInfo-title">
+							<div class="label" v-text="sfLang.buyerMsg"></div>
+						</div>
+						<ul class="dingdan">
+							<li>
+								<span>
+									{{ sfLang.name }}: {{orderDetailData.f_ReceiveName}}
+								</span>
+							</li>
+							<li>
+								<span>
+									{{ sfLang.phone }}: {{orderDetailData.f_ReceiveTel}}
+								</span>
+							</li>
+							<li style="width: 100%;">
+								<span>
+									{{ sfLang.address }}: {{orderDetailData.f_ReceiveAddress}}
+								</span>
+							</li>
+						</ul>
+						<div class="orderInfo-title">
+							<div class="label" v-text="sfLang.proMsg"></div>
+						</div>
+						<ul class="shangpin">
+							<li v-for="(item, index) in orderDetailData.orderDetail">
+								<ul class="shangpin-xiangqing">
+									<li @click="sftodetails(item.f_MarketingId)">
+										<img :src="item.f_GoodsImg" alt="">
+									</li>
+									<li @click="sftodetails(item.f_MarketingId)">
+										<h4>
+											<nav v-if="item.f_MarketingType == 1" v-text="'【'+sfLang.sferbanjia+'】'+item.f_SaleTitle"></nav>
+											<nav v-else-if="item.f_MarketingType == 3" v-text="'【'+sfLang.sfersongyi+'】'+item.f_SaleTitle"></nav>
+											<nav v-else v-text="item.f_SaleTitle"></nav>
+											<span class="pro-sku" v-text="sfLang.proSku + ': ' + item.sku"></span>
+										</h4>
+									</li>
+									<li>
+										<div>
+											<div>{{ sfLang.proNum }}: {{item.f_GoodsNum}}</div>
+											<div>{{ sfLang.total }}: <span>{{currencySign}}{{item.f_Total}}</span></div>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<div class="commodity">
+								<ul>
+									<li>
+										<span class="label" v-text="sfLang.sfhuodong+':'"></span>
+										<span class="txt" v-text="'-'+currencySign + discount"></span>
+									</li>
+									<li>
+										<span class="label" v-text="sfLang.sfshouxufei+':'"></span>
+										<span class="txt">+{{currencySign}}{{orderDetailData.f_Fee}}</span>
+									</li>
+									<li>
+										<span class="label" v-text="sfLang.totalAll+':'"></span>
+										<span class="txt count">{{currencySign}}{{orderDetailData.f_OriginalTotalPrice}}</span>
+									</li>
+								</ul>
+								<!-- <span class="commodity-span1">{{ sfLang.totalAll }}: </span>
+								<span class="commodity-span2">{{currencySign}}{{orderDetailData.f_OriginalTotalPrice}}</span>
+								<nav class="sfcommdity" v-if="orderDetailData.f_PayType == 2">
+									<span>{{ sfLang.sfshouxufei }}: </span>
+									<span>{{currencySign}}{{orderDetailData.f_Fee}}</span>
+								</nav>
+								<nav class="sfcommdity" v-else-if="orderDetailData.f_PayType == 0">
+									<span>{{ sfLang.sfshouxufei }}: </span>
+									<span>{{currencySign}}{{orderDetailData.f_Fee}}</span>
+									<span>{{ sfLang.sfshouxufei }}: </span>
+									<span>{{currencySign}}{{orderDetailData.f_Fee}}</span>
+								</nav> -->
+							</div>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div class="dibu" id="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/orderInfo.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+</html>

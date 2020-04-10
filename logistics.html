@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="./css/base.css" />
+		<link rel="stylesheet" type="text/css" href="./css/logistics.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | รายละเอียด</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="wuliu">
+				<div class="look">
+					<p v-text="sfLang.baoguo"></p>
+				</div>
+				<div class="wuliu">
+					<el-backtop target=".backTop" :right="100">
+						<div>
+							<img src="./images/index/top-bg.png">
+						</div>
+					</el-backtop>
+					<ul class="jindu-img">
+						<!-- 					<li class="jindu-1">
+						<div>
+							<img src="images/wuliu/wuliu1.png" alt="">
+						</div>
+						<p>Submit an order</p>
+					</li>
+					<li class="jindu-2">
+						<div>
+							<img src="images/wuliu/line.png" alt="">
+						</div>
+					</li> -->
+						<li class="jindu-3">
+							<div>
+								<img src="images/wuliu/wuliu2.png" alt="">
+							</div>
+							<p v-text="sfLang.chuku"></p>
+						</li>
+						<li class="jindu-4">
+							<div>
+								<img v-if="sfLog == 1 || sfLog == 3" src="images/wuliu/line.png" alt="">
+								<img v-else src="images/wuliu/line-bg.png" alt="">
+							</div>
+						</li>
+						<li class="jindu-5">
+							<div>
+								<img v-if="sfLog == 1 || sfLog == 3" src="images/wuliu/wuliu3.png" alt="">
+								<img v-else src="images/wuliu/wuliu3-bg.png" alt="">
+							</div>
+							<p v-text="sfLang.yunshu"></p>
+						</li>
+						<li class="jindu-6">
+							<div>
+								<img v-if="sfLog == 1 || sfLog == 2" src="images/wuliu/line.png" alt="">
+								<img v-else src="images/wuliu/line-bg.png" alt="">
+							</div>
+						</li>
+						<li class="jindu-7">
+							<div>
+								<img v-if="sfLog == 1" src="images/wuliu/wuliu4.png" alt="">
+								<img v-else src="images/wuliu/wuliu4-bg.png" alt="">
+							</div>
+							<p v-if="sfLog == 2" v-text="sfLang.juqian"></p>
+							<p v-else v-text="sfLang.qianshou"></p>
+						</li>
+					</ul>
+					<ul class="signed">
+						<p>{{trackStatus}}</p>
+						<ul class="sign">
+							<li v-for="(item, index) in wuliuData" :key="index">
+								<p style="padding: 0;">{{item.f_TrackTime}}</p>
+								<ul class="sign-xx">
+									<p style="padding: 0;">{{item.f_TrackStatusName}}</p>
+									<li>
+										<span>{{item.f_TrackContent}}</span>
+									</li>
+									<div v-if="item.f_TrackStatus == 1">
+										<img src="images/wuliu/6.png">
+									</div>
+								</ul>
+							</li>
+							<li v-if="wuliuData.length == 0" v-text="sfLang.emwuliu"></li>
+						</ul>
+						<p style="margin-top: 0; height: 0; margin-bottom: 60px;"></p>
+						<!-- 商品信息 -->
+						<div class="waylill">
+							<ul>
+								<li>
+									<p>{{ sfLang.orderNum }} : {{orderData.f_OrderNo}}</p>
+								</li>
+								<li>
+									<p>{{ sfLang.addr }} : {{orderData.f_ReceiveAddress}}<span style="margin-left: 15px;">{{orderData.f_ReceiveName}}
+											{{orderData.f_ReceiveTel}}</span></p>
+								</li>
+								<li>
+									<ul class="waylill-img">
+										<li v-for="(item, index) in orderImgUrl" :key="index">
+											<img :src="item" alt="">
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</ul>
+				</div>
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/logistics.js" type="text/javascript" charset="utf-8"></script>
+</html>

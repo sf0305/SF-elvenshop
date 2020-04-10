@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+		<link rel="stylesheet" type="text/css" href="./css/element-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/base.css" />
+		<link rel="stylesheet" type="text/css" href="css/collectStyle.css" />
+		<link rel="shortcut icon" href="images/logo.png" />
+		<title>ElvenShop | บันทึก</title>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			/* .header-nav-right ul li:nth-child(2) {
+				background: rgba(255, 255, 255, 0.74);
+				border-radius: 10rem;
+			} */
+			
+			.header-nav-right ul li:nth-child(3) a {
+				color: #ff5230;
+			}
+			
+			.header-nav-right ul li:nth-child(3) div {
+				background: url(./images/icon/Collection2.png) no-repeat;
+				background-size: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="backTop">
+			<header class="header" id="header">
+				<header-nav></header-nav>
+			</header>
+			<div id="collect" v-cloak>
+				<el-backtop target=".backTop" :right="100">
+					<div>
+						<img src="./images/index/top-bg.png">
+					</div>
+				</el-backtop>
+				<section class="header-logo">
+					<div>
+						<div class="header-left">
+							<a href="./index.html"><img src="images/index/logo.png" alt=""></a>
+							<div @click="toIndexPage" class="hand">
+								<p>ELVENSHOP</p>
+								<p>Quick and convenient</p>
+							</div>
+						</div>
+						<div class="search">
+							<input type="text" v-model="searchMsg.data.F_SearchContent" @keyup.enter.exact="searchBtn"  @focus="sfsearch" @blur="nosfsearch" @input="inputsfsearch">
+							<span></span>
+							<h2 @click="searchBtn" v-text="sfLang.search"></h2>
+							<nav class="sfhot-words" v-show="sfhistory">
+								<ul class="sfhot-words-list">
+									<li class="sfhot-words-item" v-for="(item, index) in searchItem" :key="index">
+										<a v-text="item.f_SearchContent" @click="searchLsit(item.f_SearchContent)"></a>
+										<span v-text="sfLang.sfserhis"></span>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</section>
+				<div class="order">
+
+					<!-- 收藏 -->
+					<div class="col">
+						<li class="orederTitle">
+							<p v-text="sfLang.myCollect"></p>
+						</li>
+						<div>
+							<input type="text" :placeholder="sfLang.baobei" v-model="collectMsg.data.f_SearchContent">
+							<p class="guanli" id="gl-1" @click="switchHandle" v-show="switchItem == false" v-text="sfLang.batchMan"></p>
+							<p class="guanli" id="gl-2" @click="switchHandle" v-show="switchItem == true" v-text="sfLang.cancelMan"></p>
+							<span @click="searchCollect">
+								<img src="images/index/search.png" alt="">
+							</span>
+							<div class="piliang" v-show="switchItem == true">
+								<div class="form-item">
+									<input id="quxu" type="checkbox" :checked="selectAll" @click="selectAllCollect" />
+									<label for="quxu" v-text="sfLang.quanxuan"></label>
+								</div>
+								<!-- <p><span></span>All of them</p> -->
+								<p @click="delCollect"><span><img src="images/my/del.png" alt=""></span>{{ sfLang.del }}</p>
+							</div>
+						</div>
+						<ul class="product">
+							<li v-for="(item, index) in collectData" :class="{on: item.is_Select}" v-if="item.f_IsPublish == 1">
+								<span @click="selectCollect(item.f_MarketingId, index)"><img :src="item.f_MainImageUrl+'?imageView/2/w/254/h/254'" :alt="item.f_Title"></span>
+								<p class="sp-biaoti" v-text="item.f_Title" @click="selectCollect(item.f_MarketingId, index)"></p>
+								<p class="sp-jiage"><span><i class="fontStyle" v-text="currencySign"></i>{{item.f_SalesPrice}}</span></p>
+								<p class="sp-price"><span><i class="fontStyle" v-text="currencySign"></i>{{item.f_OriginalPrice}}</span></p>
+							</li>
+							<li v-else-if="item.f_IsPublish == 0" :class="{on: item.is_Select}">
+								<span @click="selectCollect(item.f_MarketingId, index)"><img :src="item.f_MainImageUrl" :alt="item.f_Title"></span>
+								<p @click="selectCollect(item.f_MarketingId, index)" class="sp-biaoti off" v-text="item.f_Title"></p>
+								<p class="offTxt">
+									<span v-text="sfLang.off"></span>
+								</p>
+							</li>
+						</ul>
+					</div>
+					<div style="clear: both;"></div>
+					<div class="notContent" v-show="notCollect">
+						<img src="images/icon/collectIcon.png">
+						<p v-text="sfLang.notCollect"></p>
+					</div>
+					<div class="paging" v-show="pagerCollectVisible">
+						<el-pagination @current-change="changePage" background layout="prev, pager, next" :total="total">
+						</el-pagination>
+					</div>
+				</div>
+
+			</div>
+			<div class="help" id="help">
+				<help-nav></help-nav>
+			</div>
+			<div id="dibu" class="dibu"></div>
+			<footer class="footer" id="footer"></footer>
+		</div>
+	</body>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+	<script src="./js/element-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/headerAndFooter.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/collect.js" type="text/javascript" charset="utf-8"></script>
+</html>

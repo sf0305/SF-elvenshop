@@ -1,0 +1,136 @@
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+article{
+	width: 100%;
+	height: 750px;
+}
+section{
+	width: 70%;
+	height:700px;
+	margin: 0 auto;
+	padding: 50px 0;
+}
+section>div{
+	float: left;
+}
+.sideBar{
+	width: 20%;
+	height: auto;
+}
+.sideBar>img{
+	width: 150px;
+	height: 150px;
+	position: relative;
+	left: 32%;
+
+}
+.sideBar>ul{
+	height: auto;
+}
+.sideBar>ul>li{
+	text-align: center;
+	padding: 20px 0;
+	cursor: pointer;
+}
+
+
+
+.container{
+	width: 80%;
+	height: auto;
+	position: relative;
+}
+.container>div{
+	position: absolute;
+}
+.container-data0{
+	margin-top:100px;
+	display: block;
+}
+.container-data0>p{
+	font-size: 1.2em;
+	font-weight: bold;
+}
+.container-data0>ul{
+	height: auto;
+	width: 100%;
+}
+.container-data0>ul>li{
+	width: 100%;
+	
+	margin: 50px;
+}
+.container-data1{
+	display: none;
+}
+.container-data1>div{
+	margin: 50px 0;
+}
+.container-data1>div>img{
+	width: 100px;
+	height: 100px;
+}
+.container-data2{
+	margin-top:50px;
+	display: none;
+	width: 100%;
+}
+.container-data2>form{
+	margin: 20px 0;
+}
+.container-data2>form>div{
+	width: 100%;
+	display: block;
+	margin: 20px 0;
+
+}
+.container-data2>form>div>label{
+	display: inline-block;
+	 width: 150px;
+	        text-align: right;
+}
+
+table{
+	width:100%;
+	border-collapse: collapse;
+	text-align: center;
+}
+ table td, table th
+{
+    border: 1px solid #cad9ea;
+    color: #666;
+    height:40px;
+}
+table thead th{
+    background-color: #CCE8EB;
+    width: 100px;
+	font-size: 1rem;
+}
+ table td{
+	 font-size: .8rem;
+ }
+ 
+.modelRequest{
+	 width: 100%;
+	 height: 1000px;
+	 position: fixed;
+	 background: rgba(0,0,0,.2);
+	 z-index: 1000;
+	 bottom: 0;
+	 left: 0;
+	 display: none;
+ }
+.modelRequest-container{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -25%;
+	margin-top: -150px;
+	width: 50%;
+	height: 300px;
+	background: #FFFFFF;
+
+}
